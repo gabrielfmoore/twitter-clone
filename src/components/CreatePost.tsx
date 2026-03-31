@@ -98,10 +98,10 @@ export default function CreatePost() {
             <div className="text-primary cursor-pointer">
               <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
             </div>
-            <div className="text-primary cursor-pointer">
+            <div className="text-primary cursor-pointer shrink-0">
               <Image src={Grok} alt="Grok" width={20} height={20} className="translate-x-[-3px]" />
             </div>
-            <div className="text-primary cursor-pointer translate-x-[-4px]">
+            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-4px]">
               <CiBoxList size={20} />
             </div>
             <div ref={emojiRef}>
@@ -124,7 +124,7 @@ export default function CreatePost() {
             <div className="text-primary cursor-pointer translate-x-[-6px]">
               <RiCalendarScheduleLine size={18} />
             </div>
-            <div className="text-primary cursor-pointer translate-x-[-5px]">
+            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-5px]">
               <IoLocationOutline size={18} />
             </div>
             <div className="text-primary cursor-pointer translate-x-[-5px]">

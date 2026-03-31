@@ -14,7 +14,7 @@ import { LuRocket } from "react-icons/lu";
 export default function LeftSidebar() {
   return (
     <aside className="sticky top-0 left-0 shrink-0 h-screen flex lg:justify-end justify-center">
-      <div className="flex flex-col items-end md:w-[72px] w-[89px] lg:w-[88px] 2xl:w-[279px] 2xl:pr-2 xl:pr-[3px] lg:pr-0 md:pr-[14px] md:ml-[22px] lg:ml-[1px] xl:ml-[11px] 2xl:ml-[6px] h-screen border-border border-r">
+      <div className="flex flex-col items-end w-[69px] sm:w-[89px] md:w-[72px] lg:w-[88px] 2xl:w-[279px] 2xl:pr-2 xl:pr-[3px] lg:pr-0 md:pr-[14px] md:ml-[22px] lg:ml-[1px] xl:ml-[11px] 2xl:ml-[6px] h-screen border-border border-r">
         <div className="flex items-center justify-center 2xl:justify-start 2xl:px-[7px] pt-1 h-[53px] w-full">
           <button className=" p-[11px] 2xl:p-[16px] text-white rounded-full hover:bg-hover">
             <FaXTwitter size={29} />
@@ -94,7 +94,7 @@ export default function LeftSidebar() {
           >
             <LuRocket size={25} />
             <span className="hidden 2xl:inline text-xl font-semibold">
-              Profile
+              Creator Studio
             </span>
           </Link>
           <Link
@@ -129,7 +129,7 @@ export default function LeftSidebar() {
             <FaFeather size={30} />
           </button>
           <div className="mt-auto w-full">
-            <div className="2xl:mt-[11px] mt-[14px] mb-[12px] 2xl:ml-0 md:ml-[2px] ml-[14px] py-3 lg:pl-3 w-full text-white flex justify-center xl:justify-between items-center">
+            <div className="2xl:mt-[11px] mt-[14px] mb-[12px] 2xl:ml-0 ml:[2pxåå] sm:ml-[14px] md:ml-[2px] py-3 lg:pl-3 w-full text-white flex justify-center xl:justify-between items-center">
               <div className="flex justify-between items-center w-full">
                 <div className="flex items-center gap-[11px]">
                   <Image
