@@ -4,13 +4,14 @@ import { RxCross2 } from "react-icons/rx";
 
 export default function RightSidebar() {
   return (
-    <aside className="sticky top-0 lg:w-[311px] xl:w-[390px] pl-[20px] xl:pl-[30px] lg:mr-[10px] shrink-0 h-screen hidden lg:block border-border border-l">
+    <aside className=" top-0 lg:w-[311px] xl:w-[390px] pl-[20px] xl:pl-[30px] lg:mr-[10px] shrink-0 h-screen hidden lg:block">
       <div className="flex flex-col w-full xl:w-[350px]">
-        <div className="text-secondary-text flex items-center gap-[4px] border border-border px-[12px] py-[11px] mt-[5px] rounded-full">
+        <div suppressHydrationWarning className="text-secondary-text flex items-center gap-[4px] border border-border px-[12px] py-[11px] mt-[5px] rounded-full">
           <IoSearch size={18} className="text-thin text-gray-500" />
           <input
             type="text"
             placeholder="Search"
+            suppressHydrationWarning
             className="border-none outline-none text-white w-full text-sm"
           />
         </div>
@@ -25,7 +26,7 @@ export default function RightSidebar() {
             Get rid of ads, see your analytics, boost your replies and unlock
             20+ features.
           </p>
-          <button className="bg-primary text-[15px] tracking-[-0.035em] text-white mt-[19px] px-[17px] py-[6px] pb-[7px] rounded-full font-black cursor-pointer">
+          <button suppressHydrationWarning className="bg-primary text-[15px] tracking-[-0.035em] text-white mt-[19px] px-[17px] py-[6px] pb-[7px] rounded-full font-black cursor-pointer">
             Subscribe
           </button>
         </div>
@@ -60,7 +61,7 @@ export default function RightSidebar() {
                 </p>
               </div>
             </div>
-            <button className="bg-white text-black text-sm px-4 h-[36px] border rounded-full border font-bold cursor-pointer">
+            <button suppressHydrationWarning className="bg-white text-black text-sm px-4 h-[36px] border rounded-full border font-bold cursor-pointer">
               Follow
             </button>
           </div>
@@ -80,7 +81,7 @@ export default function RightSidebar() {
                 </p>
               </div>
             </div>
-            <button className="bg-white text-black text-sm px-4 h-[36px] border rounded-full border font-bold cursor-pointer">
+            <button suppressHydrationWarning className="bg-white text-black text-sm px-4 h-[36px] border rounded-full border font-bold cursor-pointer">
               Follow
             </button>
           </div>
@@ -100,7 +101,7 @@ export default function RightSidebar() {
                 </p>
               </div>
             </div>
-            <button className="bg-white text-black text-sm px-4 h-[36px] border rounded-full border font-bold cursor-pointer">
+            <button suppressHydrationWarning className="bg-white text-black text-sm px-4 h-[36px] border rounded-full border font-bold cursor-pointer">
               Follow
             </button>
           </div>

@@ -55,7 +55,7 @@ export default function Posts() {
                 />
               </div>
             </div>
-            <Link href={"#"} className="text-white my-2 block">
+            <Link href={"/home/post/123"} className="text-white my-2 block">
               <p className="`text-[15px] font-[500] leading-[1.3]">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Incidunt eligendi veniam optio cumque architecto cum qui nostrum
@@ -67,7 +67,7 @@ export default function Posts() {
                 </span>
               </p>
             </Link>
-            <Link href="#" className="block">
+            <Link href=   "/home/post/125" className="block">
               <Image
                 src="/images/brody.jpeg"
                 alt="Post"

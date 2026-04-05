@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="flex md:justify-center ">
         <LeftSidebar />
-        <div className="flex-1 min-w-0 md:flex-none md:w-[600px] lg:w-[598px] shrink-0 min-h-screen lg:mr-0 md:mr-[61px] mr-0">
+        <div className="flex-1 min-w-0 md:flex-none md:w-[600px] lg:w-[598px] shrink-0 min-h-screen lg:mr-0 md:mr-[61px] mr-0 border-x border-border">
           {children}
         </div>
         <RightSidebar />

@@ -4,25 +4,24 @@ import Image from "next/image";
 import { TbPhoto } from "react-icons/tb";
 import { FaRegFaceSmile } from "react-icons/fa6";
 import { IoLocationOutline } from "react-icons/io5";
-import { RiCalendarScheduleLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import Grok from "../../public/images/Grok-transparent.png";
-import { CiBoxList } from "react-icons/ci";
 import { MdOutlineGifBox } from "react-icons/md";
 import { RiFlag2Line } from "react-icons/ri";
-import { useGetUser } from "@/custom-hooks/useGetUser";
-import Link from "next/link";
 
-export default function CreatePost() {
-  const [post, setPost] = useState("");
+
+
+
+export default function ReplyPost() {
+  const [reply, setReply] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const isDisabled = post.trim() === "" && !selectedImage;
+  const isDisabled = reply.trim() === "" && !selectedImage;
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiRef = useRef<HTMLDivElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
-  const { loading, session, profile } = useGetUser();
+  const [showAbove, setShowAbove] = useState(false);
 
   useEffect(() => {
     if (!showEmojiPicker) return;
@@ -43,31 +42,24 @@ export default function CreatePost() {
   };
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
-    setPost((prev) => prev + emojiData.emoji);
+    setReply((prev) => prev + emojiData.emoji);
   };
 
-  if (loading) return <h1 className="text-2xl text-white">Loading...</h1>;
-  if (!session) return null;
-
-  console.log("profile", profile);
-
   return (
-    <div className="flex gap-[10px] px-4 pt-3 pb-2 border-y border-border">
-      <Link href={`/${profile?.username || "user"}`}>
-        <Image
-          src={profile?.avatar_url || "/images/brody.jpeg"}
-          alt="Profile"
-          width={500}
-          height={500}
-          className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
-        />
-      </Link>
+    <div className="flex min-h-[84px] gap-[10px] px-4 pt-3 pb-2 border-b border-border">
+      <Image
+        src="/images/profile.png"
+        alt="Profile"
+        width={500}
+        height={500}
+        className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
+      />
       <div className="w-full">
         <input
-          value={post}
-          onChange={(e) => setPost(e.target.value)}
+          value={reply}
+          onChange={(e) => setReply(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          placeholder="What's happening?"
+          placeholder="Post your reply"
           suppressHydrationWarning
           className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none text-xl tracking-[0.02em] text-white resize-none"
         ></input>
@@ -93,7 +85,7 @@ export default function CreatePost() {
           </div>
         )}
         <div
-          className={`relative flex justify-between pt-[13px] pl-[1px] items-center ${isFocused ? "border-t border-border mt-8" : ""}`}
+          className={`${isFocused ? "block" : "hidden"} relative flex justify-between pt-[13px] pl-[1px] items-center`}
         >
           <div className="flex gap-[18px] ">
             <div
@@ -106,29 +98,24 @@ export default function CreatePost() {
               <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
             </div>
             <div className="text-primary cursor-pointer shrink-0">
-              <Image
-                src={Grok}
-                alt="Grok"
-                width={20}
-                height={20}
-                className="translate-x-[-3px]"
-              />
-            </div>
-            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-4px]">
-              <CiBoxList size={20} />
+              <Image src={Grok} alt="Grok" width={20} height={20} className="translate-x-[-3px]" />
             </div>
             <div ref={emojiRef}>
               <div
                 className="text-primary cursor-pointer"
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                onClick={() => {
+                  if (!showEmojiPicker && emojiRef.current) {
+                    const rect = emojiRef.current.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - rect.bottom;
+                    setShowAbove(spaceBelow < 450);
+                  }
+                  setShowEmojiPicker(!showEmojiPicker);
+                }}
               >
-                <FaRegFaceSmile
-                  size={17}
-                  className="translate-x-[-5px] translate-y-[1px]"
-                />
+                <FaRegFaceSmile size={17} className="translate-x-[-5px] translate-y-[1px]" />
               </div>
               {showEmojiPicker && (
-                <div className="absolute z-10 top-full left-0 w-[320px] max-w-2xl border border-border rounded-lg">
+                <div className={`absolute z-10 left-0 w-[320px] max-w-2xl border border-border rounded-lg ${showAbove ? 'bottom-full' : 'top-full'}`}>
                   <EmojiPicker
                     onEmojiClick={onEmojiClick}
                     theme={Theme.DARK}
@@ -136,9 +123,6 @@ export default function CreatePost() {
                   />
                 </div>
               )}
-            </div>
-            <div className="text-primary cursor-pointer translate-x-[-6px]">
-              <RiCalendarScheduleLine size={18} />
             </div>
             <div className="hidden sm:block text-primary cursor-pointer translate-x-[-5px]">
               <IoLocationOutline size={18} />
@@ -148,18 +132,12 @@ export default function CreatePost() {
             </div>
           </div>
           {isDisabled ? (
-            <button
-              suppressHydrationWarning
-              className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
-            >
-              Post
+            <button suppressHydrationWarning className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50">
+              Reply
             </button>
           ) : (
-            <button
-              suppressHydrationWarning
-              className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer"
-            >
-              Post
+            <button suppressHydrationWarning className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer">
+              Reply
             </button>
           )}
         </div>
