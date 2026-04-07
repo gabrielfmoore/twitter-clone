@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="h-[744px] m-auto lg:m-0 w-auto flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-center">
+      <div className="lg:h-[744px] m-auto lg:m-0 w-auto flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-center">
         <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center p-[32px] overflow-hidden">
           <FontAwesomeIcon
             icon={faXTwitter}

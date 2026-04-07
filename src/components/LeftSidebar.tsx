@@ -4,7 +4,7 @@ import { BiBell, BiEnvelope } from "react-icons/bi";
 import { FaFeather, FaRegUser, FaXTwitter } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
 import { HiOutlineUserAdd } from "react-icons/hi";
-import { IoSearchOutline } from "react-icons/io5";
+import { IoChatbubbleOutline, IoSearchOutline } from "react-icons/io5";
 import { TbDotsCircleHorizontal } from "react-icons/tb";
 import Grok from "../../public/images/grok-icon.png";
 import { FaFeatherAlt, FaRegBookmark } from "react-icons/fa";
@@ -25,7 +25,7 @@ export default function LeftSidebar() {
         <div className="flex flex-col flex-1 mt-1 2xl:mt-[5px] pr-2 pl-2 2xl:pr-[10px] 2xl:pl-[12px] 2xl:items-start items-center w-full gap-[2px] [@media(min-height:855px)]:gap-[11px]">
           <Link
             href="/home"
-            className="text-white flex items-center gap-[18px] p-[10px] rounded-full hover:bg-hover"
+            className="text-white flex items-center gap-[18px] p-[10px] mt-[6px] mb-[-6px] rounded-full hover:bg-hover"
           >
             <GoHomeFill size={29} />
             <span className="hidden 2xl:inline text-xl font-bold xl:pr-4">
@@ -34,9 +34,9 @@ export default function LeftSidebar() {
           </Link>
           <Link
             href="#"
-            className="text-white flex items-center gap-[18px] p-[10px] rounded-full hover:bg-hover"
+            className="text-white flex items-center gap-[18px] p-[10px] mt-[4px] mb-[-2px] rounded-full hover:bg-hover"
           >
-            <IoSearchOutline size={29} />
+            <IoSearchOutline size={27} />
             <span className="hidden 2xl:inline text-xl font-semibold">
               Explore
             </span>
@@ -63,7 +63,7 @@ export default function LeftSidebar() {
             href="#"
             className="text-white flex items-center gap-[19px] p-[10px] rounded-full hover:bg-hover"
           >
-            <BiEnvelope size={28} />
+            <IoChatbubbleOutline size={27} />
             <span className="hidden 2xl:inline text-xl font-semibold">
               Chat
             </span>
@@ -85,14 +85,14 @@ export default function LeftSidebar() {
           </Link>
           <Link
             href="#"
-            className="hidden [@media(min-height:717px)]:flex text-white items-center gap-[20px] px-[12px] py-[13px] rounded-full hover:bg-hover"
+            className="hidden [@media(min-height:717px)]:flex text-white items-center gap-[20px] px-[12px] py-[12px] rounded-full hover:bg-hover"
           >
             <FaRegBookmark size={23}/>
             <span className="hidden 2xl:inline text-xl font-semibold">Bookmarks</span>
           </Link>
           <Link
             href="#"
-            className="hidden [@media(min-height:767px)]:flex text-white flex items-center gap-[22px] px-[14px] 2xl:py-[12px] py-[12px] rounded-full hover:bg-hover"
+            className="hidden [@media(min-height:767px)]:flex text-white flex items-center gap-[22px] px-[14px] 2xl:py-[12px] py-[11px] rounded-full hover:bg-hover"
           >
             <LuRocket size={25} />
             <span className="hidden 2xl:inline text-xl font-semibold">
@@ -101,7 +101,7 @@ export default function LeftSidebar() {
           </Link>
           <Link
             href="#"
-            className="hidden [@media(min-height:667px)]:flex text-white items-center gap-[20px] px-[12px] py-[10px] rounded-full hover:bg-hover"
+            className="hidden [@media(min-height:667px)]:flex text-white items-center gap-[20px] px-[12px] py-[9px] mt-[2px] rounded-full hover:bg-hover"
           >
             <FaXTwitter size={25} />
             <span className="hidden 2xl:inline text-xl font-semibold">Premium</span>
@@ -117,7 +117,7 @@ export default function LeftSidebar() {
           </Link>
           <Link
             href="#"
-            className="text-white flex items-center gap-[19px] px-[11px] 2xl:py-[8px] py-[12px] rounded-full hover:bg-hover"
+            className="text-white flex items-center gap-[19px] px-[11px] 2xl:py-[8px] py-[12px] mt-[2px] rounded-full hover:bg-hover"
           >
             <TbDotsCircleHorizontal size={27} />
             <span className="hidden 2xl:inline text-xl font-semibold">
@@ -127,8 +127,7 @@ export default function LeftSidebar() {
           <button suppressHydrationWarning className="hidden 2xl:block bg-white text-black text-[17px] py-[13px] w-full xl:w-[233px] mt-[9px] font-bold rounded-full cursor-pointer xl:translate-x-[-1px] ">
             Post
           </button>
-          <button suppressHydrationWarning className="flex justify-center items-center bg-primary h-[52px] w-[52px] p-[11px] ml-[6px] mt-[4px] mr-[5px] rounded-full cursor-pointer text-white block 2xl:hidden">
-          {/* <button suppressHydrationWarning className="bg-primary p-[11px] ml-[6px] mt-[4px] mr-[5px] rounded-full cursor-pointer text-white block 2xl:hidden"> */}
+          <button suppressHydrationWarning className="flex justify-center items-center bg-primary h-[52px] w-[52px] p-[11px] ml-[6px] mt-[11px] mr-[5px] rounded-full cursor-pointer text-white block 2xl:hidden">
             <FaFeatherAlt size={20} className="scale-0.5" />
           </button>
           <div className="mt-auto w-full">

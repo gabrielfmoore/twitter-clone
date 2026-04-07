@@ -11,8 +11,6 @@ import Grok from "../../public/images/Grok-transparent.png";
 import { CiBoxList } from "react-icons/ci";
 import { MdOutlineGifBox } from "react-icons/md";
 import { RiFlag2Line } from "react-icons/ri";
-import { useGetUser } from "@/custom-hooks/useGetUser";
-import Link from "next/link";
 
 export default function CreatePost() {
   const [post, setPost] = useState("");
@@ -22,7 +20,6 @@ export default function CreatePost() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiRef = useRef<HTMLDivElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
-  const { loading, session, profile } = useGetUser();
 
   useEffect(() => {
     if (!showEmojiPicker) return;
@@ -46,30 +43,23 @@ export default function CreatePost() {
     setPost((prev) => prev + emojiData.emoji);
   };
 
-  if (loading) return <h1 className="text-2xl text-white">Loading...</h1>;
-  if (!session) return null;
-
-  console.log("profile", profile);
-
   return (
     <div className="flex gap-[10px] px-4 pt-3 pb-2 border-y border-border">
-      <Link href={`/${profile?.username || "user"}`}>
-        <Image
-          src={profile?.avatar_url || "/images/brody.jpeg"}
-          alt="Profile"
-          width={500}
-          height={500}
-          className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
-        />
-      </Link>
+      <Image
+        src="/images/profile.png"
+        alt="Profile"
+        width={500}
+        height={500}
+        className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
+      />
       <div className="w-full">
         <input
           value={post}
           onChange={(e) => setPost(e.target.value)}
           onFocus={() => setIsFocused(true)}
           placeholder="What's happening?"
-          suppressHydrationWarning
-          className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none text-xl tracking-[0.02em] text-white resize-none"
+          id=""
+          className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none [@media(min-width:360px)]:text-xl tracking-[0.02em] text-white resize-none"
         ></input>
         {selectedImage && (
           <div className="relative h-60 md:h-100 rounded-lg overflow-hidden border border border mb-10">
@@ -93,9 +83,9 @@ export default function CreatePost() {
           </div>
         )}
         <div
-          className={`relative flex justify-between pt-[13px] pl-[1px] items-center ${isFocused ? "border-t border-border mt-8" : ""}`}
+          className={`relative flex items-center h-[52px] pt-[13px] pl-[1px] ml-[-50px] [@media(min-width:360px)]:ml-0 ${isFocused ? "border-t border-border mt-8" : ""}`}
         >
-          <div className="flex gap-[18px] ">
+          <div className="flex gap-[18px] min-w-0 scrollbar-hidden max-w-[calc(100%-73px)] [@media(max-width:420px)]:overflow-x-auto [@media(max-width:420px)]:overflow-y-hidden">
             <div
               className="text-primary cursor-pointer"
               onClick={() => fileRef.current?.click()}
@@ -147,21 +137,17 @@ export default function CreatePost() {
               <RiFlag2Line size={19} style={{ transform: "scaleY(1.1)" }} />
             </div>
           </div>
-          {isDisabled ? (
-            <button
-              suppressHydrationWarning
-              className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
-            >
-              Post
-            </button>
-          ) : (
-            <button
-              suppressHydrationWarning
-              className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer"
-            >
-              Post
-            </button>
-          )}
+          <div className="absolute right-0 bg-black z-10 pl-1 ml-auto shrink-0">
+            {isDisabled ? (
+              <button className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50">
+                Post
+              </button>
+            ) : (
+              <button className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer">
+                Post
+              </button>
+            )}
+          </div>
         </div>
         <input
           type="file"

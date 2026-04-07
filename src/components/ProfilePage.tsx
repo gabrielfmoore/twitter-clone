@@ -134,7 +134,7 @@ export default function ProfilePage() {
       )}
 
       {/* Tabs */}
-      <div className="h-[53px] w-full grid grid-cols-6 text-white text-[15px] mt-2 border-b border-border">
+      <div className="h-[53px] w-full min-w-[492px] grid grid-cols-6 text-white text-[15px] mt-2 border-b border-border">
         {tabs.map((tab) => (
           <button
             suppressHydrationWarning
