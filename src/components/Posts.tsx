@@ -24,7 +24,7 @@ export default function Posts() {
             height={100}
             className="w-10 h-10 mr-2 object-cover rounded-full shrink-0"
           />
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full min-w-0">
             <div className="w-full wrap-nowrap justify-between flex ">
               <div className="flex justify-between gap-1 text-sm">
                 <div className="flex gap-[2px] text-[15px] cursor-pointer ">
@@ -47,7 +47,7 @@ export default function Posts() {
                   alt="Grok"
                   width={20}
                   height={20}
-                  className="w-[20px] h-[20px] opacity-80 grayscale cursor-pointer hover:opacity-100 hover:grayscale-0"
+                  className="[@media(max-width:480px)]:hidden w-[20px] h-[20px] opacity-80 grayscale cursor-pointer hover:opacity-100 hover:grayscale-0"
                 />
                 <BsThreeDots
                   size={17}
@@ -111,7 +111,7 @@ export default function Posts() {
             height={100}
             className="w-10 h-10 mr-2 object-cover rounded-full shrink-0"
           />
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full min-w-0">
             <div className="w-full wrap-nowrap justify-between flex ">
               <div className="flex justify-between gap-1 text-sm">
                 <div className="flex gap-[2px] text-[15px] cursor-pointer ">
@@ -134,7 +134,7 @@ export default function Posts() {
                   alt="Grok"
                   width={20}
                   height={20}
-                  className="w-[20px] h-[20px] opacity-80 grayscale cursor-pointer hover:opacity-100 hover:grayscale-0"
+                  className="[@media(max-width:480px)]:hidden w-[20px] h-[20px] opacity-80 grayscale cursor-pointer hover:opacity-100 hover:grayscale-0"
                 />
                 <BsThreeDots
                   size={17}

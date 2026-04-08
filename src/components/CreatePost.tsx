@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect, ChangeEvent } from "react";
+import { useState, useRef, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
 import { TbPhoto } from "react-icons/tb";
 import { FaRegFaceSmile } from "react-icons/fa6";
@@ -11,8 +11,11 @@ import Grok from "../../public/images/Grok-transparent.png";
 import { CiBoxList } from "react-icons/ci";
 import { MdOutlineGifBox } from "react-icons/md";
 import { RiFlag2Line } from "react-icons/ri";
+import { useGetUser } from "@/custom-hooks/useGetUser";
+import Link from "next/link";
 
 export default function CreatePost() {
+  const { profile } = useGetUser();
   const [post, setPost] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const isDisabled = post.trim() === "" && !selectedImage;
@@ -45,15 +48,19 @@ export default function CreatePost() {
 
   return (
     <div className="flex gap-[10px] px-4 pt-3 pb-2 border-y border-border">
-      <Image
-        src="/images/profile.png"
-        alt="Profile"
-        width={500}
-        height={500}
-        className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
-      />
-      <div className="w-full">
+      <Link href={`/${profile?.username || ""}`} className="shrink-0">
+        <Image
+          src={profile?.avatar_url || "/images/default-avatar.svg"}
+          alt="Profile"
+          width={500}
+          height={500}
+          priority
+          className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
+        />
+      </Link>
+      <div suppressHydrationWarning className="w-full">
         <input
+        suppressHydrationWarning
           value={post}
           onChange={(e) => setPost(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -85,7 +92,7 @@ export default function CreatePost() {
         <div
           className={`relative flex items-center h-[52px] pt-[13px] pl-[1px] ml-[-50px] [@media(min-width:360px)]:ml-0 ${isFocused ? "border-t border-border mt-8" : ""}`}
         >
-          <div className="flex gap-[18px] min-w-0 scrollbar-hidden max-w-[calc(100%-73px)] [@media(max-width:420px)]:overflow-x-auto [@media(max-width:420px)]:overflow-y-hidden">
+          <div className="flex gap-[18px] w-[202px] scrollbar-hidden max-w-[calc(100%-73px)] ">
             <div
               className="text-primary cursor-pointer"
               onClick={() => fileRef.current?.click()}
@@ -139,7 +146,10 @@ export default function CreatePost() {
           </div>
           <div className="absolute right-0 bg-black z-10 pl-1 ml-auto shrink-0">
             {isDisabled ? (
-              <button className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50">
+              <button
+                suppressHydrationWarning
+                className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
+              >
                 Post
               </button>
             ) : (

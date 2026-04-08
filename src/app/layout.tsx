@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+import SplashScreen from "@/src/components/SplashScreen";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -32,7 +34,11 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background">{children}</body>
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background">
+        <SplashScreen />
+        <Toaster position="bottom-center" theme="dark" />
+        {children}
+      </body>
     </html>
   );
 }

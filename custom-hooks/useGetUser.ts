@@ -12,6 +12,8 @@ type Profile = {
   created_at: string;
 };
 
+const profileCache: Record<string, Profile> = {};
+
 export const useGetUser = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const { loading, session } = useUserSession();
@@ -19,6 +21,11 @@ export const useGetUser = () => {
 
   useEffect(() => {
     if (!userId) return;
+
+    if (profileCache[userId]) {
+      setProfile(profileCache[userId]);
+      return;
+    }
 
     const fetchProfile = async () => {
       const { data, error } = await supabase
@@ -31,6 +38,7 @@ export const useGetUser = () => {
         return;
       }
       if (data) {
+        profileCache[userId] = data;
         setProfile(data);
       }
     };
