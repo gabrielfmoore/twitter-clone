@@ -28,7 +28,7 @@ export default function Profile() {
   return (
     <div
       ref={ref}
-      className="relative flex justify-center sm:justify-between items-center w-full"
+      className="relative flex justify-center sm:justify-between items-center w-full 2xl:mr-1"
     >
       <div
         onClick={() => setLogoutOpen(!logoutOpen)}

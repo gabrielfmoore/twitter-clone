@@ -28,3 +28,16 @@ export const signInUser = async (email: string, password: string) => {
     return { error: "An error occurred during sign in." };
   }
 };
+
+export const getProfileByUsername = async (username: string) => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("username", username)
+    .maybeSingle();
+  if (error) {
+    console.error("GetProfileByUsernameError:", error.message);
+    return null;
+  }
+  return data;
+};

@@ -3,6 +3,7 @@ import { useUserSession } from "./useUserSession";
 import { supabase } from "@/lib/SupabaseClient";
 
 type Profile = {
+  id: string;
   username: string;
   name: string;
   avatar_url: string;

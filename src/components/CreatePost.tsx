@@ -13,16 +13,19 @@ import { MdOutlineGifBox } from "react-icons/md";
 import { RiFlag2Line } from "react-icons/ri";
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import Link from "next/link";
+import { usePostTweet } from "@/custom-hooks/useTweet";
 
 export default function CreatePost() {
-  const { profile } = useGetUser();
+  const { profile, session } = useGetUser();
   const [post, setPost] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [tweetImage, setTweetImage] = useState<File | null>(null);
   const isDisabled = post.trim() === "" && !selectedImage;
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiRef = useRef<HTMLDivElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
+  const { mutate, isPending } = usePostTweet();
 
   useEffect(() => {
     if (!showEmojiPicker) return;
@@ -39,6 +42,7 @@ export default function CreatePost() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedImage(URL.createObjectURL(file));
+      setTweetImage(file);
     }
   };
 
@@ -46,8 +50,33 @@ export default function CreatePost() {
     setPost((prev) => prev + emojiData.emoji);
   };
 
+  const PostTweet = () => {
+    if (!post.trim() && !tweetImage) {
+      return;
+    }
+    if (!session?.user.id) return;
+    mutate(
+      {
+        userId: session.user.id,
+        // content: post || null,
+        content: post,
+        tweetImage: tweetImage || null,
+      },
+      {
+        onSuccess: () => {
+          setPost(() => "");
+          setSelectedImage(() => null);
+          setTweetImage(() => null);
+        },
+        onError: (error) => {
+          console.log("Failed to post tweet", error.message);
+        },
+      },
+    );
+  };
+
   return (
-    <div className="flex gap-[10px] px-4 pt-3 pb-2 border-y border-border">
+    <div className={`flex gap-[10px] px-4 pt-3 pb-2 border-y border-border ${isPending ? "opacity-30" : ""}`}>
       <Link href={`/${profile?.username || ""}`} className="shrink-0">
         <Image
           src={profile?.avatar_url || "/images/default-avatar.svg"}
@@ -60,7 +89,7 @@ export default function CreatePost() {
       </Link>
       <div suppressHydrationWarning className="w-full">
         <input
-        suppressHydrationWarning
+          suppressHydrationWarning
           value={post}
           onChange={(e) => setPost(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -84,6 +113,7 @@ export default function CreatePost() {
                 onClick={() => {
                   setSelectedImage(null);
                   if (fileRef.current) fileRef.current.value = "";
+                  setTweetImage(null);
                 }}
               />
             </button>
@@ -103,12 +133,16 @@ export default function CreatePost() {
               <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
             </div>
             <div className="text-primary cursor-pointer shrink-0">
-              <Image
-                src={Grok}
-                alt="Grok"
-                width={20}
-                height={20}
-                className="translate-x-[-3px]"
+              <div
+                className="w-[20px] h-[20px] translate-x-[-3px] bg-primary"
+                style={{
+                  WebkitMaskImage: `url(${Grok.src})`,
+                  maskImage: `url(${Grok.src})`,
+                  WebkitMaskSize: "contain",
+                  maskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                }}
               />
             </div>
             <div className="hidden sm:block text-primary cursor-pointer translate-x-[-4px]">
@@ -153,7 +187,7 @@ export default function CreatePost() {
                 Post
               </button>
             ) : (
-              <button className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer">
+              <button onClick={PostTweet} className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer">
                 Post
               </button>
             )}

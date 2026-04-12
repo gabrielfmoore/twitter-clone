@@ -1,116 +1,120 @@
 import GoBackButton from "@/src/components/GoBackButton";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { FaRegComment, FaRegHeart, FaRegBookmark } from "react-icons/fa6";
-import { FiRepeat } from "react-icons/fi";
-import { IoIosStats } from "react-icons/io";
 import { MdVerified } from "react-icons/md";
-import { BsThreeDots } from "react-icons/bs";
-import { RiShare2Line } from "react-icons/ri";
 import Grok from "@/public/images/grok-icon.png";
 import ReplyPost from "@/src/components/ReplyPost";
 import Comments from "@/src/components/Comments";
+import TweetActions from "@/src/components/TweetActions";
+import { formatPostDate } from "@/lib/formatDate";
+import { supabase } from "@/lib/SupabaseClient";
+import TweetMenu from "@/src/components/TweetMenu";
 
-export default function Page() {
+const getTweet = async (id: string) => {
+  const { error, data } = await supabase
+    .from("tweets")
+    .select("*, profiles(*)")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching tweet:", error.message);
+    return null;
+  }
+  return data;
+};
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ postid: string }>;
+}) {
+  const { postid } = await params;
+  const tweet = await getTweet(postid);
+
+  if (!tweet)
+    return (
+      <div className="text-white p-4">
+        <GoBackButton />
+        <p className="mt-4">Post not found.</p>
+      </div>
+    );
+
   return (
     <div>
-      <div className="flex text-white items-center px-4 h-[53px]">
+      <div className="flex text-white items-center px-4 h-[53px] sticky top-0 bg-black/70 backdrop-blur-md z-10 mb-3">
         <div className="flex items-center gap-10">
           <GoBackButton />
           <span className="font-[700] text-xl">Post</span>
         </div>
       </div>
-      <div className="flex w-full px-4 pb-3 ">
+      <div className="flex w-full px-4 pb-3">
         <div className="flex flex-col w-full">
-          <div className="flex w-full wrap-nowrap justify-between">
+          {/* Author row */}
+          <div className="flex w-full justify-between">
             <div className="flex">
-              
-              <Image
-              src="/images/image3.jpg"
-              alt="Profile"
-              width={100}
-              height={100}
-              className="w-10 h-10 mr-2 object-cover rounded-full shrink-0"
-              />
-            <div className="flex justify-between gap-1 text-sm">
-              <div className="flex flex-col text-[15px] cursor-pointer ">
+              <Link
+                href={`/${tweet.profiles?.username || ""}`}
+              >
+                <Image
+                  src={
+                    tweet.profiles?.avatar_url || "/images/default-avatar.svg"
+                  }
+                  alt="Profile"
+                  width={100}
+                  height={100}
+                  className="w-10 h-10 mr-2 object-cover rounded-full shrink-0"
+                />
+              </Link>
+              <div className="flex flex-col text-[15px] cursor-pointer">
                 <div className="flex gap-1">
                   <span className="text-white font-bold hover:underline">
-                  NASA
-                </span>
-                <MdVerified className="text-secondary-text mt-[2px] w-[17px] h-[17px]" />
-                  </div>
-                <span className="text-secondary-text font-light ml-[3px]">
-                  @NASA
+                    {tweet.profiles?.name}
+                  </span>
+                  <MdVerified className="text-primary mt-[2px] w-[17px] h-[17px]" />
+                </div>
+                <span className="text-secondary-text font-light">
+                  @{tweet.profiles?.username}
                 </span>
               </div>
-              </div>
             </div>
-            <div className="flex gap-[10px] mt-[2px]">
-              <Image
-                src={Grok}
-                alt="Grok"
-                width={20}
-                height={20}
-                className="w-[20px] h-[20px] opacity-80 grayscale cursor-pointer scale-130 translate-x-[2px] hover:opacity-100 hover:grayscale-0"
-              />
-              <BsThreeDots
-                size={17}
-                className="text-secondary-text cursor-pointer translate-y-[2px]"
-              />
-            </div>
+            <TweetMenu tweet={tweet} />
           </div>
-          <Link href={"/home/post/123"} className="text-white my-2 block">
-            <p className="`text-[15px] font-[500] leading-[1.3]">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt
-              eligendi veniam optio cumque architecto cum qui nostrum itaque ex
-              obcaecati. <br />
-              <br />
-              Lorem ipsum <br />
-              <span className="text-primary hover:underline cursor-pointer">
-                www.website.com
-              </span>
-            </p>
-          </Link>
-          <Link href="/home/post/125" className="block">
-            <Image
-              src="/images/brody.jpeg"
-              alt="Post"
-              width={500}
-              height={500}
-              className="w-full h-auto rounded-lg border border-border object-cover"
-            />
-          </Link>
-          <div className="flex justify-between my-4 text-secondary-text">
-            <div className=" flex items-center gap-1 hover:text-blue-400 cursor-pointer">
-              <FaRegComment />
-              <span className="text-sm">1.2K</span>
-            </div>
-            <div className=" flex items-center gap-1 hover:text-green-400 cursor-pointer">
-              <FiRepeat />
-              <span className="text-sm">203</span>
-            </div>
-            <div className=" flex items-center gap-1 hover:text-red-500 cursor-pointer">
-              <FaRegHeart />
-              <span className="text-sm">1.2K</span>
-            </div>
-            <div className=" flex items-center gap-1 hover:text-blue-500 cursor-pointer">
-              <IoIosStats />
-              <span className="text-sm">5K</span>
-            </div>
-            <div className=" flex items-center gap-4">
-              <FaRegBookmark className="hover:text-blue-400 cursor-pointer" />
-              <RiShare2Line
-                size={20}
-                className="hover:text-blue-400 cursor-pointer"
+
+          {/* Content */}
+          <div className="text-white my-3">
+            {tweet.content && (
+              <p className="text-[15px] font-[400] leading-[1.3]">
+                {tweet.content}
+              </p>
+            )}
+            {tweet.image_url && (
+              <Image
+                src={tweet.image_url}
+                alt="Post"
+                width={600}
+                height={400}
+                className="w-full mt-2 h-auto rounded-2xl border border-border object-cover"
               />
-            </div>
+            )}
+          </div>
+
+          {/* Timestamp */}
+          <div className="text-secondary-text text-[15px] pb-3 border-b border-border">
+            {formatPostDate(tweet.created_at)}
+          </div>
+
+          {/* Actions */}
+          <div className="py-1 border-b border-border">
+            <TweetActions tweet={tweet} />
           </div>
         </div>
       </div>
-      <ReplyPost />
-      <Comments />
+      {/* Reply input */}
+      {/* Placeholder replies */}
+      
+      <ReplyPost tweetId={tweet.id} />
+      <Comments tweetId={tweet.id} />
     </div>
   );
 }

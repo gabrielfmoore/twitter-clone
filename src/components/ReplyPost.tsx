@@ -9,19 +9,21 @@ import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import Grok from "../../public/images/Grok-transparent.png";
 import { MdOutlineGifBox } from "react-icons/md";
 import { RiFlag2Line } from "react-icons/ri";
+import { useUserSession } from "@/custom-hooks/useUserSession";
+import { useCreateComment } from "@/custom-hooks/useComment";
 
-
-
-
-export default function ReplyPost() {
+export default function ReplyPost({ tweetId }: { tweetId: string }) {
   const [reply, setReply] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const isDisabled = reply.trim() === "" && !selectedImage;
+  const { mutate, isPending} = useCreateComment()
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiRef = useRef<HTMLDivElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [showAbove, setShowAbove] = useState(false);
+  const { session } = useUserSession();
+  const userId = session?.user.id;
 
   useEffect(() => {
     if (!showEmojiPicker) return;
@@ -45,8 +47,27 @@ export default function ReplyPost() {
     setReply((prev) => prev + emojiData.emoji);
   };
 
+  const PostComment = () => {
+    if (!reply.trim()) return;
+    if (!userId) return;
+    mutate({
+      userId,
+      tweetId,
+      content: reply,
+    
+    },{
+      onSuccess: () => {
+        setReply("");
+        setSelectedImage(null);
+        if (fileRef.current) fileRef.current.value = "";
+      }
+    })
+  };
+
+  if (!session) return null;
+
   return (
-    <div className="flex min-h-[84px] gap-[10px] px-4 pt-3 pb-2 border-b border-border">
+    <div className={`flex min-h-[84px] gap-[10px] px-4 pt-3 pb-2 border-b border-border ${isPending ? "opacity-30" : ""}`}>
       <Image
         src="/images/profile.png"
         alt="Profile"
@@ -98,7 +119,13 @@ export default function ReplyPost() {
               <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
             </div>
             <div className="text-primary cursor-pointer shrink-0">
-              <Image src={Grok} alt="Grok" width={20} height={20} className="translate-x-[-3px]" />
+              <Image
+                src={Grok}
+                alt="Grok"
+                width={20}
+                height={20}
+                className="translate-x-[-3px]"
+              />
             </div>
             <div ref={emojiRef}>
               <div
@@ -112,10 +139,15 @@ export default function ReplyPost() {
                   setShowEmojiPicker(!showEmojiPicker);
                 }}
               >
-                <FaRegFaceSmile size={17} className="translate-x-[-5px] translate-y-[1px]" />
+                <FaRegFaceSmile
+                  size={17}
+                  className="translate-x-[-5px] translate-y-[1px]"
+                />
               </div>
               {showEmojiPicker && (
-                <div className={`absolute z-10 left-0 w-[320px] max-w-2xl border border-border rounded-lg ${showAbove ? 'bottom-full' : 'top-full'}`}>
+                <div
+                  className={`absolute z-10 left-0 w-[320px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
+                >
                   <EmojiPicker
                     onEmojiClick={onEmojiClick}
                     theme={Theme.DARK}
@@ -132,11 +164,18 @@ export default function ReplyPost() {
             </div>
           </div>
           {isDisabled ? (
-            <button suppressHydrationWarning className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50">
+            <button
+              suppressHydrationWarning
+              className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
+            >
               Reply
             </button>
           ) : (
-            <button suppressHydrationWarning className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer">
+            <button
+                onClick={PostComment}
+              suppressHydrationWarning
+              className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer"
+            >
               Reply
             </button>
           )}

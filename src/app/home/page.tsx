@@ -9,7 +9,7 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState("For you");
 
   return (
-    <div className="flex flex-col lg:border-none border-r border-border min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <div className="h-[53px] w-full text-[15px] grid grid-cols-2 text-white pr-1">
         {tabs.map((tab) => (
           <button
