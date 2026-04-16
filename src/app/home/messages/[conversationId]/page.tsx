@@ -36,10 +36,11 @@ export default function ConversationPage() {
         .eq("conversation_id", conversationId)
         .neq("user_id", userId)
         .single();
-      if (data?.profiles) {
-        setOtherUser(
-          data.profiles as { name: string; username: string; avatar_url: string }
-        );
+      const profile = Array.isArray(data?.profiles)
+        ? data.profiles[0]
+        : data?.profiles;
+      if (profile) {
+        setOtherUser(profile as { name: string; username: string; avatar_url: string });
       }
     };
     fetchOtherUser();

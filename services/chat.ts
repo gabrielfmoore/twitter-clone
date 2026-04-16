@@ -47,9 +47,11 @@ export const getConversations = async (userId: string) => {
       (p) => p.conversation_id === convId && p.user_id !== userId
     );
     const lastMessage = lastMessages.find((m) => m.conversation_id === convId);
+    const profiles = otherParticipant?.profiles;
+    const otherUser = Array.isArray(profiles) ? profiles[0] ?? null : profiles ?? null;
     return {
       id: convId,
-      otherUser: otherParticipant?.profiles ?? null,
+      otherUser,
       lastMessage: lastMessage ?? null,
     };
   });
