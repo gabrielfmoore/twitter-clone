@@ -4,31 +4,35 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { BsThreeDots } from "react-icons/bs";
 import Grok from "@/public/images/Grok-transparent.png";
-import { Tweet } from "@/types/types";
-import { FaRegComment, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { IoIosStats } from "react-icons/io";
-import { LuPencil, LuPin, LuList, LuMegaphone, LuCode } from "react-icons/lu";
+import { LuPin, LuList, LuMegaphone, LuCode } from "react-icons/lu";
 import { HiOutlineStar } from "react-icons/hi2";
-import { IoInformationCircleOutline } from "react-icons/io5";
+
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { BiVolumeMute } from "react-icons/bi";
 import { RiUserUnfollowLine } from "react-icons/ri";
 import { MdBlock } from "react-icons/md";
 import { PiSmileySad } from "react-icons/pi";
 import { VscFlag } from "react-icons/vsc";
-import { useDeleteTweet } from "@/custom-hooks/useTweet";
+import { useDeleteComment } from "@/custom-hooks/useComment";
 import DeleteConfirmModal from "./DeleteConfirmModal";
-import { useRouter } from "next/navigation";
 
+interface CommentMenuProps {
+  comment: {
+    id: string;
+    user_id: string;
+    tweet_id: string;
+    profiles?: { username: string };
+  };
+}
 
 const ownerItems: { icon: React.ComponentType<{ size?: number; className?: string }>; label: string; red?: boolean }[] = [
   { icon: FaRegTrashAlt, label: "Delete", red: true },
-  { icon: LuPencil, label: "Edit" },
   { icon: LuPin, label: "Pin to your profile" },
   { icon: HiOutlineStar, label: "Highlight on your profile" },
   { icon: LuList, label: "Add/remove from Lists" },
-  { icon: IoInformationCircleOutline, label: "Add/remove content disclosure" },
-  { icon: FaRegComment, label: "Change who can reply" },
+  { icon: BiVolumeMute, label: "Mute this conversation" },
   { icon: IoIosStats, label: "View post activity" },
   { icon: LuCode, label: "Embed post" },
   { icon: IoIosStats, label: "View post analytics" },
@@ -49,15 +53,14 @@ const getOtherItems = (username: string): MenuItem[] => [
   { icon: LuMegaphone, label: "Request Community Note" },
 ];
 
-export default function TweetMenu({ tweet }: { tweet: Tweet }) {
+export default function CommentMenu({ comment }: CommentMenuProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { profile } = useGetUser();
-  const isOwner = profile?.id === tweet.user_id;
-  const menuItems = isOwner ? ownerItems : getOtherItems(tweet.profiles?.username || "");
-  const deleteMutation = useDeleteTweet();
-  const router = useRouter();
+  const isOwner = profile?.id === comment.user_id;
+  const menuItems = isOwner ? ownerItems : getOtherItems(comment.profiles?.username || "");
+  const deleteMutation = useDeleteComment();
 
   const handleMenuClick = (label: string) => {
     if (label === "Delete") {
@@ -68,11 +71,10 @@ export default function TweetMenu({ tweet }: { tweet: Tweet }) {
 
   const handleDeleteConfirm = () => {
     deleteMutation.mutate(
-      { tweetId: tweet.id, imagePath: tweet.image_path ?? undefined },
+      { commentId: comment.id, tweetId: comment.tweet_id },
       {
         onSuccess: () => {
           setShowDeleteModal(false);
-          router.push("/home");
         },
       }
     );
@@ -90,26 +92,26 @@ export default function TweetMenu({ tweet }: { tweet: Tweet }) {
   }, [dropdownOpen]);
 
   return (
-    <div ref={menuRef} className="relative flex gap-[10px] mt-[2px]">
+    <div ref={menuRef} className="relative shrink-0 flex mt-[2px]">
       <Image
         src={Grok}
         alt="Grok"
         width={20}
         height={20}
-        className="w-[19px] h-[19px] grayscale cursor-pointer scale-110 translate-x-[2px] hover:opacity-100 hover:grayscale-0"
+        className="hidden xs:flex w-[20px] h-[20px] mr-[5px] opacity-80 grayscale cursor-pointer scale-110 translate-x-[2px] hover:opacity-100 hover:grayscale-0"
       />
       <BsThreeDots
         onClick={() => setDropdownOpen(!dropdownOpen)}
         size={17}
-        className="text-secondary-text cursor-pointer translate-y-[2px]"
+        className="ml-[5px] text-secondary-text cursor-pointer translate-y-[2px]"
       />
       {dropdownOpen && (
-        <div className="absolute top-0 right-0 z-50 w-[290.5px] max-w-[75vw] bg-black rounded-xl border border-border shadow-[0_0_15px_rgba(255,255,255,0.1)] py-1 flex flex-col">
+        <div className="absolute top-0 right-0 z-50 w-[250px] max-w-[75vw] bg-black rounded-xl border border-border shadow-[0_0_15px_rgba(255,255,255,0.1)] py-1 flex flex-col">
           {menuItems.map((item) => (
             <button
               key={item.label}
               onClick={() => handleMenuClick(item.label)}
-              className="flex items-center gap-[10px] px-4 py-3 hover:bg-hover cursor-pointer w-full text-left"
+              className="flex h-[44px] items-center gap-[10px] px-4 py-3 hover:bg-hover cursor-pointer w-full text-left"
             >
               <item.icon
                 size={18}

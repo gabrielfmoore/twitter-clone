@@ -19,14 +19,10 @@ export const useGetUser = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const { loading, session } = useUserSession();
   const userId = session ? session.user.id : null;
+  const cachedProfile = userId ? profileCache[userId] ?? null : null;
 
   useEffect(() => {
-    if (!userId) return;
-
-    if (profileCache[userId]) {
-      setProfile(profileCache[userId]);
-      return;
-    }
+    if (!userId || cachedProfile) return;
 
     const fetchProfile = async () => {
       const { data, error } = await supabase
@@ -44,7 +40,7 @@ export const useGetUser = () => {
       }
     };
     fetchProfile();
-  }, [userId]);
+  }, [userId, cachedProfile]);
 
-  return { profile, session, loading };
+  return { profile: cachedProfile ?? profile, session, loading };
 };

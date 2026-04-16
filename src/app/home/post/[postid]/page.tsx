@@ -2,7 +2,6 @@ import GoBackButton from "@/src/components/GoBackButton";
 import Image from "next/image";
 import Link from "next/link";
 import { MdVerified } from "react-icons/md";
-import Grok from "@/public/images/grok-icon.png";
 import ReplyPost from "@/src/components/ReplyPost";
 import Comments from "@/src/components/Comments";
 import TweetActions from "@/src/components/TweetActions";
@@ -13,7 +12,7 @@ import TweetMenu from "@/src/components/TweetMenu";
 const getTweet = async (id: string) => {
   const { error, data } = await supabase
     .from("tweets")
-    .select("*, profiles(*)")
+    .select("*, profiles(*), comments(count)")
     .eq("id", id)
     .single();
 
@@ -42,7 +41,7 @@ export default async function Page({
 
   return (
     <div>
-      <div className="flex text-white items-center px-4 h-[53px] sticky top-0 bg-black/70 backdrop-blur-md z-10 mb-3">
+      <div className="flex text-white items-center px-4 h-[53px] sticky top-0 bg-black/70 backdrop-blur-md z-10">
         <div className="flex items-center gap-10">
           <GoBackButton />
           <span className="font-[700] text-xl">Post</span>
@@ -53,9 +52,7 @@ export default async function Page({
           {/* Author row */}
           <div className="flex w-full justify-between">
             <div className="flex">
-              <Link
-                href={`/${tweet.profiles?.username || ""}`}
-              >
+              <Link href={`/${tweet.profiles?.username || ""}`}>
                 <Image
                   src={
                     tweet.profiles?.avatar_url || "/images/default-avatar.svg"
@@ -110,9 +107,7 @@ export default async function Page({
           </div>
         </div>
       </div>
-      {/* Reply input */}
-      {/* Placeholder replies */}
-      
+
       <ReplyPost tweetId={tweet.id} />
       <Comments tweetId={tweet.id} />
     </div>

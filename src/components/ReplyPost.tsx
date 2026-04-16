@@ -75,15 +75,16 @@ export default function ReplyPost({ tweetId }: { tweetId: string }) {
         height={500}
         className="w-10 h-10 mt-1 object-cover rounded-full shrink-0"
       />
-      <div className="w-full">
-        <input
+      <div className="w-full min-w-0">
+        <textarea
           value={reply}
           onChange={(e) => setReply(e.target.value)}
           onFocus={() => setIsFocused(true)}
           placeholder="Post your reply"
           suppressHydrationWarning
-          className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none text-xl tracking-[0.02em] text-white resize-none"
-        ></input>
+          rows={1}
+          className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none text-xl tracking-[0.02em] text-white resize-none field-sizing-content"
+        />
         {selectedImage && (
           <div className="relative h-60 md:h-100 rounded-lg overflow-hidden border border border mb-10">
             <Image
@@ -106,9 +107,9 @@ export default function ReplyPost({ tweetId }: { tweetId: string }) {
           </div>
         )}
         <div
-          className={`${isFocused ? "block" : "hidden"} relative flex justify-between pt-[13px] pl-[1px] items-center`}
+          className={`${isFocused ? "flex" : "hidden"} relative justify-between pt-[13px] pl-[1px] items-center`}
         >
-          <div className="flex gap-[18px] ">
+          <div className="flex gap-[18px] min-w-0 overflow-x-auto scrollbar-hidden">
             <div
               className="text-primary cursor-pointer"
               onClick={() => fileRef.current?.click()}
@@ -166,7 +167,7 @@ export default function ReplyPost({ tweetId }: { tweetId: string }) {
           {isDisabled ? (
             <button
               suppressHydrationWarning
-              className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
+              className="shrink-0 bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
             >
               Reply
             </button>
@@ -174,7 +175,7 @@ export default function ReplyPost({ tweetId }: { tweetId: string }) {
             <button
                 onClick={PostComment}
               suppressHydrationWarning
-              className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer"
+              className="shrink-0 bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer"
             >
               Reply
             </button>

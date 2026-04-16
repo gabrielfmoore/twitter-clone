@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/SupabaseClient";
-import { use } from "react";
 
 export const createComment = async (
   userId: string,
@@ -25,4 +24,13 @@ export const getComments = async (tweetId: string) => {
     return;
   }
   return data ?? [];
+}
+
+export const deleteComment = async (commentId: string) => {
+  const { error } = await supabase.from("comments").delete().eq("id", commentId);
+  if (error) {
+    console.error("Error deleting comment:", error.message);
+    throw error;
+  }
+  return true;
 }

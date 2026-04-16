@@ -5,6 +5,20 @@ import { MdVerified } from "react-icons/md";
 import Link from "next/link";
 import { useGetComments } from "@/custom-hooks/useComment";
 import { formatTweetDate } from "@/lib/formatDate";
+import CommentMenu from "./CommentMenu";
+
+type Comment = {
+  id: string;
+  content: string;
+  created_at: string;
+  user_id: string;
+  tweet_id: string;
+  profiles: {
+    username: string;
+    avatar_url: string;
+    name: string;
+  } | undefined;
+};
 
 export default function Comments({ tweetId }: { tweetId: string }) {
   const { error, isError, isLoading, data: comments } = useGetComments(tweetId);
@@ -26,7 +40,7 @@ export default function Comments({ tweetId }: { tweetId: string }) {
 
   return (
     <div>
-      {comments.map((comment: any) => (
+      {comments.map((comment: Comment) => (
         <div
           key={comment.id}
           className="flex w-full px-4 py-3 border-b border-border"
@@ -41,18 +55,20 @@ export default function Comments({ tweetId }: { tweetId: string }) {
             />
           </Link>
           <div className="flex flex-col w-full min-w-0">
-            <div className="flex gap-1 text-[15px]">
-              <span className="text-white font-bold hover:underline cursor-pointer">
-                {comment.profiles?.name}
-              </span>
-              <MdVerified className="text-primary mt-[2px] w-[17px] h-[17px]" />
-              <span className="text-secondary-text font-light ml-[3px]">
-                @{comment.profiles?.username}
-              </span>
-              <span className="text-secondary-text font-light">·</span>
-              <span className="text-secondary-text font-light">
-                {formatTweetDate(comment.created_at)}
-              </span>
+            <div className="w-full flex justify-between">
+              <div className="flex flex-wrap gap-1 text-[15px]">
+                <span className="text-white whitespace-nowrap font-bold hover:underline cursor-pointer">
+                  {comment.profiles?.name}
+                </span>
+                <MdVerified className="text-primary mt-[2px] w-[17px] h-[17px]" />
+                <span className="text-secondary-text font-light ml-[3px]">
+                  @{comment.profiles?.username}
+                </span>
+                <span className="text-secondary-text font-light">
+                  · {formatTweetDate(comment.created_at)}
+                </span>
+              </div>
+              <CommentMenu comment={comment} />
             </div>
             <p className="text-white text-[15px] leading-[1.3] mt-1">
               {comment.content}

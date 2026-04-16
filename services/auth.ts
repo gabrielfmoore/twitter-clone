@@ -10,7 +10,7 @@ export const signUpUser = async (email: string, password: string) => {
       console.error("Error signing up:", error);
       return { error: error.message };
     }
-  } catch (error) {
+  } catch {
     return { error: "An error occurred during sign up." };
   }
 };
@@ -24,7 +24,7 @@ export const signInUser = async (email: string, password: string) => {
     if (error) {
       return { error: error.message };
     }
-  } catch (error) {
+  } catch {
     return { error: "An error occurred during sign in." };
   }
 };

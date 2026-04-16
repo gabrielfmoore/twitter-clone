@@ -1,4 +1,4 @@
-import { createComment, getComments } from "@/services/comments";
+import { createComment, getComments, deleteComment } from "@/services/comments";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateComment = () => {
@@ -17,6 +17,12 @@ export const useCreateComment = () => {
       queryClient.invalidateQueries({
         queryKey: ["comments", variables.tweetId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["tweet", variables.tweetId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["tweets"],
+      });
     },
   });
 };
@@ -26,5 +32,24 @@ export const useGetComments = (tweetId: string) => {
     queryFn: () => getComments(tweetId),
     queryKey: ["comments", tweetId],
     enabled: !!tweetId,
+  });
+};
+
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ commentId }: { commentId: string; tweetId: string }) =>
+      deleteComment(commentId),
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["comments", variables.tweetId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["tweet", variables.tweetId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["tweets"],
+      });
+    },
   });
 };

@@ -14,6 +14,7 @@ import { RiFlag2Line } from "react-icons/ri";
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import Link from "next/link";
 import { usePostTweet } from "@/custom-hooks/useTweet";
+import { FaGlobeAmericas } from "react-icons/fa";
 
 export default function CreatePost() {
   const { profile, session } = useGetUser();
@@ -76,7 +77,9 @@ export default function CreatePost() {
   };
 
   return (
-    <div className={`flex gap-[10px] px-4 pt-3 pb-2 border-y border-border ${isPending ? "opacity-30" : ""}`}>
+    <div
+      className={`flex gap-[10px] px-4 pt-3 pb-2 border-y border-border ${isPending ? "opacity-30" : ""}`}
+    >
       <Link href={`/${profile?.username || ""}`} className="shrink-0">
         <Image
           src={profile?.avatar_url || "/images/default-avatar.svg"}
@@ -88,15 +91,15 @@ export default function CreatePost() {
         />
       </Link>
       <div suppressHydrationWarning className="w-full">
-        <input
+        <textarea
           suppressHydrationWarning
           value={post}
           onChange={(e) => setPost(e.target.value)}
           onFocus={() => setIsFocused(true)}
           placeholder="What's happening?"
-          id=""
-          className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none [@media(min-width:360px)]:text-xl tracking-[0.02em] text-white resize-none"
-        ></input>
+          rows={1}
+          className="w-full py-3 -my-[2px] text-white font-bold placeholder:text-secondary-text placeholder:font-normal outline-none [@media(min-width:360px)]:text-xl tracking-[0.02em] text-white resize-none field-sizing-content"
+        />
         {selectedImage && (
           <div className="relative h-60 md:h-100 rounded-lg overflow-hidden border border border mb-10">
             <Image
@@ -120,19 +123,25 @@ export default function CreatePost() {
           </div>
         )}
         <div
-          className={`relative flex items-center h-[52px] pt-[13px] pl-[1px] ml-[-50px] [@media(min-width:360px)]:ml-0 ${isFocused ? "border-t border-border mt-8" : ""}`}
+          className={`relative flex items-center h-[46px] pt-[13px] pb-2 pl-[1px] ml-[-50px] [@media(min-width:360px)]:ml-0 ${isFocused ? "border-t border-border mt-8" : ""}`}
         >
+          {isFocused && (
+            <div className="absolute flex flex-row items-center bottom-[calc(80%+25px)] gap-2 text-primary">
+            <FaGlobeAmericas size={14} />
+            <span className="text-[14px] font-extrabold">Everyone can reply</span>
+          </div>)
+          }
           <div className="flex gap-[18px] w-[202px] scrollbar-hidden max-w-[calc(100%-73px)] ">
             <div
-              className="text-primary cursor-pointer"
+              className="text-primary cursor-pointer w-[36px]"
               onClick={() => fileRef.current?.click()}
             >
               <TbPhoto size={18} className="translate-y-[1px]" />
             </div>
-            <div className="text-primary cursor-pointer">
+            <div className="text-primary cursor-pointer w-[36px]">
               <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
             </div>
-            <div className="text-primary cursor-pointer shrink-0">
+            <div className="text-primary cursor-pointer w-[36px] ">
               <div
                 className="w-[20px] h-[20px] translate-x-[-3px] bg-primary"
                 style={{
@@ -145,7 +154,7 @@ export default function CreatePost() {
                 }}
               />
             </div>
-            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-4px]">
+            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-4px] w-[36px]">
               <CiBoxList size={20} />
             </div>
             <div ref={emojiRef}>
@@ -168,13 +177,13 @@ export default function CreatePost() {
                 </div>
               )}
             </div>
-            <div className="text-primary cursor-pointer translate-x-[-6px]">
+            <div className="text-primary cursor-pointer translate-x-[-6px] w-[36px]">
               <RiCalendarScheduleLine size={18} />
             </div>
-            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-5px]">
+            <div className="hidden sm:block text-primary cursor-pointer translate-x-[-5px] w-[36px]">
               <IoLocationOutline size={18} />
             </div>
-            <div className="text-primary cursor-pointer translate-x-[-5px]">
+            <div className="text-primary cursor-pointer translate-x-[-5px] w-[36px]">
               <RiFlag2Line size={19} style={{ transform: "scaleY(1.1)" }} />
             </div>
           </div>
@@ -182,12 +191,15 @@ export default function CreatePost() {
             {isDisabled ? (
               <button
                 suppressHydrationWarning
-                className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6px] mt-[2px] rounded-full cursor-not-allowed translate-y-[-2px] translate-x-[1px] opacity-50"
+                className="bg-secondary-background-2 border border-border text-black text-[15px] font-bold px-[17px] py-[6.5px] mt-[2px] rounded-full translate-y-[-2px] translate-x-[1px] opacity-50"
               >
                 Post
               </button>
             ) : (
-              <button onClick={PostTweet} className="bg-white text-black text-[15px] font-bold px-4 py-[5px] rounded-full cursor-pointer">
+              <button
+                onClick={PostTweet}
+                className="bg-white text-black text-[15px] font-bold px-4 py-[6.5px] rounded-full cursor-pointer"
+              >
                 Post
               </button>
             )}

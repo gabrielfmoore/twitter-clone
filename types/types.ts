@@ -13,4 +13,5 @@ export type Tweet = {
     name: string;
     username: string;
   };
+  comments: { count: number }[];
 };

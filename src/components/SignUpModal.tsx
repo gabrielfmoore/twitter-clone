@@ -38,7 +38,7 @@ interface SignUpModalProps {
 export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
-  const [useEmail, setUseEmail] = useState(true);
+  const [useEmail] = useState(true);
   const [month, setMonth] = useState(0);
   const [day, setDay] = useState(0);
   const [year, setYear] = useState(0);
@@ -129,12 +129,13 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
         className="bg-black w-full h-full sm:w-[600px] sm:h-[620px] sm:rounded-2xl flex flex-col relative overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center px-2 h-[53px] shrink-0">
+        {/* Header */}
+        <div className="flex items-center px-4 h-[53px] shrink-0">
           <button
             onClick={onClose}
             className="w-[34px] h-[34px] flex items-center justify-center rounded-full hover:bg-hover cursor-pointer"
           >
-            <IoClose className="text-white text-[24px]" />
+            <IoClose className="text-white text-[20px]" />
           </button>
           <div className="flex-1 flex justify-center">
             <FontAwesomeIcon
@@ -146,6 +147,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
           <div className="w-[34px]" />
         </div>
 
+        {/* Body */}
         <div className="flex-1 flex flex-col px-[80px] sm:px-[80px] pt-[20px]">
           {step === "info" && (
             <>
@@ -153,6 +155,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 Create your account
               </h1>
 
+              {/* Name */}
               <div className="relative mb-[24px]">
                 <input
                   type="text"
@@ -171,7 +174,8 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 </span>
               </div>
 
-              <div className="relative mb-[12px]">
+              {/* Phone or Email */}
+              <div className="relative mb-[8px]">
                 <input
                   type={useEmail ? "email" : "tel"}
                   value={contact}
@@ -189,12 +193,12 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 //   setUseEmail(!useEmail);
                 //   setContact("");
                 // }}
-                className="text-primary text-[15px] text-right cursor-not-allowed hover:underline mb-[24px]"
+                className="text-primary text-[15px] text-right cursor-pointer hover:underline mb-[24px]"
               >
                 {useEmail ? "Use phone instead" : "Use email instead"}
               </button>
-              <div className="mb-[24px]" />
 
+              {/* Date of birth */}
               <h2 className="text-white text-[15px] font-bold mb-[4px]">
                 Date of birth
               </h2>
@@ -204,6 +208,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
               </p>
 
               <div className="flex gap-[12px] mb-[24px]">
+                {/* Month */}
                 <div className="relative flex-[2]">
                   <select
                     name="month"
@@ -224,6 +229,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </label>
                 </div>
 
+                {/* Day */}
                 <div className="relative flex-1">
                   <select
                     name="day"
@@ -244,6 +250,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </label>
                 </div>
 
+                {/* Year */}
                 <div className="relative flex-1">
                   <select
                     name="year"
@@ -307,6 +314,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
           )}
         </div>
 
+        {/* Footer */}
         <div className="px-[80px] pb-[24px] shrink-0">
           <button
             onClick={handleNext}

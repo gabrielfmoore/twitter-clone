@@ -44,7 +44,7 @@ export const createTweet = async (
 export const getTweets = async (userId?: string) => {
   let query = supabase
     .from("tweets")
-    .select(`*, profiles(id, username, name, avatar_url)`)
+    .select(`*, profiles(id, username, name, avatar_url), comments(count)`)
     .order("created_at", { ascending: false });
   if (userId) {
     query = query.eq("user_id", userId);
@@ -59,7 +59,7 @@ export const getTweets = async (userId?: string) => {
 export const getTweetById = async (id: string) => {
   const { error, data } = await supabase
     .from("tweets")
-    .select(`*, profiles(id, username, name, avatar_url)`)
+    .select(`*, profiles(id, username, name, avatar_url), comments(count)`)
     .eq("id", id)
     .maybeSingle();
   if (error) {

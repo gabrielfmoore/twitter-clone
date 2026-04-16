@@ -11,13 +11,14 @@
   --color-secondary-background: #15202B;
   --color-secondary-background-2: #f4f4f4;
   --color-hover: #181818;
+  --color-like: rgb(249, 24, 128);;
 
   --breakpoint-xs: 600px;
   --breakpoint-sm: 688px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 988px;
   --breakpoint-xl: 1078px;
-  --breakpoint-2xl: 1265px;
+  --breakpoint-2xl: 1285px;
   --breakpoint-3xl: 1536px;
 }
 
