@@ -6,7 +6,7 @@ import Image from "next/image";
 import { HiDotsHorizontal } from "react-icons/hi";
 import LogoutModal from "./LogoutModal";
 
-export default function Profile() {
+export default function Profile({ collapsed = false }: { collapsed?: boolean }) {
   const { session, loading, profile } = useGetUser();
   const avatarUrl = profile?.avatar_url || null;
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -28,7 +28,7 @@ export default function Profile() {
   return (
     <div
       ref={ref}
-      className="relative flex justify-center sm:justify-between items-center w-full 2xl:mr-1"
+      className={`relative flex justify-center items-center w-full ${collapsed ? "" : "sm:justify-between 2xl:mr-1"}`}
     >
       <div
         onClick={() => setLogoutOpen(!logoutOpen)}
@@ -54,7 +54,7 @@ export default function Profile() {
             className="w-10 h-10 object-cover rounded-full shrink-0"
           />
         )}
-        <div className="hidden 2xl:block w-full text-[15px]/[1.4] mt-[1px]">
+        <div className={`hidden ${collapsed ? "" : "2xl:block"} w-full text-[15px]/[1.4] mt-[1px]`}>
           <p className="font-bold">{profile?.name || "User"}</p>
           <p className="text-secondary-text tracking-[0.01em] font-light">
             @{profile?.username || "user"}
@@ -63,7 +63,7 @@ export default function Profile() {
       </div>
       <HiDotsHorizontal
         size={17}
-        className="text-white hidden mt-[2px] mr-[3px] 2xl:block cursor-pointer"
+        className={`text-white hidden mt-[2px] mr-[3px] ${collapsed ? "" : "2xl:block"} cursor-pointer`}
         onClick={() => setLogoutOpen(!logoutOpen)}
       />
       <LogoutModal isOpen={logoutOpen} />

@@ -5,7 +5,7 @@ export const getConversations = async (userId: string) => {
   const { data, error } = await supabase
     .from("conversation_participants")
     .select(
-      "conversation_id, conversations(id, created_at), profiles(id, username, name, avatar_url)"
+      "conversation_id, conversations!conversation_id(id, created_at), profiles!user_id(id, username, name, avatar_url)"
     )
     .eq("user_id", userId);
 
@@ -21,7 +21,7 @@ export const getConversations = async (userId: string) => {
   // Fetch all participants for those conversations (to get the other user's info)
   const { data: allParticipants, error: partError } = await supabase
     .from("conversation_participants")
-    .select("conversation_id, user_id, profiles(id, username, name, avatar_url)")
+    .select("conversation_id, user_id, profiles!user_id(id, username, name, avatar_url)")
     .in("conversation_id", conversationIds);
 
   if (partError) {
@@ -126,32 +126,16 @@ export const getOrCreateConversation = async (
     }
   }
 
-  // No existing conversation — create one
-  const { data: newConvo, error: convoError } = await supabase
-    .from("conversations")
-    .insert({})
-    .select("id")
-    .single();
+  // No existing conversation — create one atomically via DB function
+  const { data: newConvoId, error: convoError } = await supabase
+    .rpc("create_conversation", { other_user_id: otherUserId });
 
   if (convoError) {
     console.error("Error creating conversation:", convoError.message);
     throw convoError;
   }
 
-  // Add both users as participants
-  const { error: participantError } = await supabase
-    .from("conversation_participants")
-    .insert([
-      { conversation_id: newConvo.id, user_id: currentUserId },
-      { conversation_id: newConvo.id, user_id: otherUserId },
-    ]);
-
-  if (participantError) {
-    console.error("Error adding participants:", participantError.message);
-    throw participantError;
-  }
-
-  return newConvo.id;
+  return newConvoId as string;
 };
 
 // Search users by username or name (for new conversation)
