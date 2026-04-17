@@ -6,6 +6,7 @@ import Link from "next/link";
 import { IoSearch, IoClose, IoCalendarOutline } from "react-icons/io5";
 import { HiBadgeCheck } from "react-icons/hi";
 import { MdVerified } from "react-icons/md";
+import EditProfileModal from "./EditProfileModal";
 import GoBackButton from "./GoBackButton";
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { useGetTweetsByUserId } from "@/custom-hooks/useTweet";
@@ -22,6 +23,7 @@ const tabs = ["Posts", "Replies", "Highlights", "Articles", "Media", "Likes"];
 export default function ProfilePage({ username }: { username: string }) {
   const [activeTab, setActiveTab] = useState("Posts");
   const [showVerified, setShowVerified] = useState(true);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const { profile: loggedInProfile, loading } = useGetUser();
 
   const { data: viewedProfile, isLoading: profileLoading } = useQuery({
@@ -91,14 +93,17 @@ export default function ProfilePage({ username }: { username: string }) {
                 alt="Avatar"
                 width={115}
                 height={115}
-                className="w-[115px] h-[115px] rounded-full object-cover border-2 border-black"
+                className="w-[115px] h-[115px] rounded-full object-cover border-4 border-black"
               />
             ) : (
               <div className="w-[115px] h-[115px] rounded-full border-4 border-black bg-gray-700 animate-pulse" />
             )}
           </div>
           {isOwnProfile ? (
-            <button className="absolute justify-center items-center right-0 top-0 h-[36px] px-4 mt-3 text-[15px] font-[800] text-white border border-border-2 rounded-full">
+            <button
+              onClick={() => setShowEditProfile(true)}
+              className="absolute justify-center items-center right-0 top-0 h-[36px] px-4 mt-3 text-[15px] font-[800] text-white border border-border-2 rounded-full cursor-pointer hover:bg-hover"
+            >
               Edit profile
             </button>
           ) : (
@@ -245,6 +250,19 @@ export default function ProfilePage({ username }: { username: string }) {
             </div>
           ))}
         </div>
+      )}
+
+      {showEditProfile && profile && (
+        <EditProfileModal
+          onClose={() => setShowEditProfile(false)}
+          profile={{
+            id: profile.id,
+            name: profile.name || "",
+            username: profile.username || "",
+            avatar_url: profile.avatar_url || null,
+            created_at: profile.created_at || "",
+          }}
+        />
       )}
     </div>
   );

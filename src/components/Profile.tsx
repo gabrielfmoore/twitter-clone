@@ -66,7 +66,7 @@ export default function Profile({ collapsed = false }: { collapsed?: boolean }) 
         className={`text-white hidden mt-[2px] mr-[3px] ${collapsed ? "" : "2xl:block"} cursor-pointer`}
         onClick={() => setLogoutOpen(!logoutOpen)}
       />
-      <LogoutModal isOpen={logoutOpen} />
+      <LogoutModal isOpen={logoutOpen} anchorRef={ref} />
     </div>
   );
 }

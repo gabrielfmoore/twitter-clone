@@ -13,7 +13,7 @@ type Profile = {
   created_at: string;
 };
 
-const profileCache: Record<string, Profile> = {};
+export const profileCache: Record<string, Profile> = {};
 
 export const useGetUser = () => {
   const [profile, setProfile] = useState<Profile | null>(null);

@@ -14,7 +14,9 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
-  const [splashPhase, setSplashPhase] = useState<"logo" | "spinner" | "done">("logo");
+  const [splashPhase, setSplashPhase] = useState<"logo" | "spinner" | "done">(
+    "logo",
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -71,27 +73,31 @@ export default function Home() {
     <div className="min-h-screen max-w-screen flex flex-col">
       <div className="lg:h-[744px] m-auto lg:m-0 w-auto flex flex-col lg:flex-row items-start lg:items-center justify-center lg:justify-center">
         <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center p-[32px] overflow-hidden">
-          <FontAwesomeIcon
-            icon={faXTwitter}
-            className="text-white"
-            style={{
-              width: "100%",
-              maxWidth: 360,
-              height: "100%",
-              maxHeight: 360,
-              outline: "none",
-            }}
-          />
+          <div className="relative">
+            <FontAwesomeIcon
+              icon={faXTwitter}
+              className="text-white"
+              style={{
+                width: "100%",
+                maxWidth: 360,
+                height: "100%",
+                maxHeight: 360,
+                outline: "none",
+              }}
+            />
+            <div className="absolute bottom-0 left-5 font-bold text-sm text-white">* not actually, just a clone</div>
+          </div>
         </div>
         <div className="flex flex-col">
           <div className="lg:w-[45vw] lg:h-[587px] m-0 sm:mx-auto lg:min-w-[600px] xs:w-[600px] w-full flex justify-start">
             <div className="w-full flex flex-col items-start justify-center p-[36px]">
-              <div className="lg:hidden flex items-start pb-[12px]">
+              <div className=" lg:hidden flex items-start pb-[12px] gap-2">
                 <FontAwesomeIcon
                   icon={faXTwitter}
                   className="text-white"
                   style={{ width: 44, height: 44, outline: "none" }}
                 />
+                <div className="left-0 font-bold text-sm text-white">* this is not actual X!</div>
               </div>
               <h2 className="text-[40px] xs:text-[70px] w-[470px] leading-[1.2] lg:w-full font-[900] text-primary-text whitespace-wrap lg:whitespace-nowrap my-[46px]">
                 Happening now

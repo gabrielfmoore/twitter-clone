@@ -105,6 +105,16 @@ export default function ProfileSetupModal({ isOpen }: ProfileSetupModalProps) {
 
   function handleSkip() {
     if (step === "avatar") {
+      // Set avatar to default if skipped
+      (async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase
+            .from("profiles")
+            .update({ avatar_url: "/images/default-avatar.svg" })
+            .eq("id", user.id);
+        }
+      })();
       setStep("username");
     } else {
       finishSetup();
