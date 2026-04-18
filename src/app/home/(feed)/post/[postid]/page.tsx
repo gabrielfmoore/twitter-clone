@@ -8,6 +8,7 @@ import TweetActions from "@/src/components/TweetActions";
 import { formatPostDate } from "@/lib/formatDate";
 import { supabase } from "@/lib/SupabaseClient";
 import TweetMenu from "@/src/components/TweetMenu";
+import TweetImage from "@/src/components/TweetImage";
 
 const getTweet = async (id: string) => {
   const { error, data } = await supabase
@@ -86,13 +87,7 @@ export default async function Page({
               </p>
             )}
             {tweet.image_url && (
-              <Image
-                src={tweet.image_url}
-                alt="Post"
-                width={600}
-                height={400}
-                className="w-full mt-2 h-auto rounded-2xl border border-border object-cover"
-              />
+              <TweetImage tweetId={tweet.id} imageUrl={tweet.image_url} />
             )}
           </div>
 

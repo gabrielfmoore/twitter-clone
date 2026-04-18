@@ -7,16 +7,21 @@ import { IoSearch, IoClose, IoCalendarOutline } from "react-icons/io5";
 import { HiBadgeCheck } from "react-icons/hi";
 import { MdVerified } from "react-icons/md";
 import EditProfileModal from "./EditProfileModal";
+import FollowButton from "./FollowButton";
 import GoBackButton from "./GoBackButton";
 import { useGetUser } from "@/custom-hooks/useGetUser";
-import { useGetTweetsByUserId } from "@/custom-hooks/useTweet";
+import { useGetUserTweetsAndRetweets, useGetUserMedia } from "@/custom-hooks/useTweet";
+import { useFollowingCount, useFollowerCount } from "@/custom-hooks/useFollow";
+import { useGetLikedTweets } from "@/custom-hooks/useLike";
 import { IoIosArrowForward } from "react-icons/io";
 import { Tweet } from "@/types/types";
 import TweetActions from "./TweetActions";
 import TweetMenu from "./TweetMenu";
 import { formatTweetDate } from "@/lib/formatDate";
+import { FiRepeat } from "react-icons/fi";
 import { getProfileByUsername } from "@/services/auth";
 import { useQuery } from "@tanstack/react-query";
+import MediaViewerModal from "./MediaViewerModal";
 
 const tabs = ["Posts", "Replies", "Highlights", "Articles", "Media", "Likes"];
 
@@ -24,6 +29,7 @@ export default function ProfilePage({ username }: { username: string }) {
   const [activeTab, setActiveTab] = useState("Posts");
   const [showVerified, setShowVerified] = useState(true);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [mediaViewer, setMediaViewer] = useState<{ tweetId: string; imageUrl: string } | null>(null);
   const { profile: loggedInProfile, loading } = useGetUser();
 
   const { data: viewedProfile, isLoading: profileLoading } = useQuery({
@@ -34,7 +40,12 @@ export default function ProfilePage({ username }: { username: string }) {
 
   const isOwnProfile = loggedInProfile?.username === username;
   const profile = viewedProfile;
-  const { data: userTweets, isLoading: tweetsLoading } = useGetTweetsByUserId(profile?.id || "");
+  const { data: userTweets, isLoading: tweetsLoading } = useGetUserTweetsAndRetweets(profile?.id);
+  const { data: likedTweets, isLoading: likesLoading } = useGetLikedTweets(profile?.id);
+  const { data: userMedia, isLoading: mediaLoading } = useGetUserMedia(profile?.id);
+
+  const { data: followingCount } = useFollowingCount(profile?.id);
+  const { data: followerCount } = useFollowerCount(profile?.id);
 
   const displayName = profile?.name || "";
   const avatarUrl = profile?.avatar_url || null;
@@ -107,9 +118,10 @@ export default function ProfilePage({ username }: { username: string }) {
               Edit profile
             </button>
           ) : (
-            <button className="absolute justify-center items-center right-0 top-0 h-[36px] px-4 mt-3 text-[15px] font-[800] text-white border border-border-2 rounded-full">
-              Follow
-            </button>
+            <FollowButton
+              targetUserId={profile?.id || ""}
+              className="absolute right-0 top-0 mt-3"
+            />
           )}
         </div>
 
@@ -124,11 +136,11 @@ export default function ProfilePage({ username }: { username: string }) {
           </div>
           <div className="flex gap-4 mt-3 text-[14px]">
             <span className="text-white">
-              <span className="font-bold">0</span>{" "}
+              <span className="font-bold">{followingCount ?? 0}</span>{" "}
               <span className="text-secondary-text">Following</span>
             </span>
             <span className="text-white">
-              <span className="font-bold">0</span>{" "}
+              <span className="font-bold">{followerCount ?? 0}</span>{" "}
               <span className="text-secondary-text">Followers</span>
             </span>
           </div>
@@ -193,18 +205,64 @@ export default function ProfilePage({ username }: { username: string }) {
         </div>
       </div>
 
-      {/* User's tweets */}
-      {tweetsLoading ? (
-        <div className="flex items-center justify-center min-h-[200px]">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {userTweets?.map((tweet: Tweet) => (
+      {/* User's tweets / liked tweets / media */}
+      {(() => {
+        if (activeTab === "Media") {
+          if (mediaLoading) return (
+            <div className="flex items-center justify-center min-h-[200px]">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          );
+          if (!userMedia || userMedia.length === 0) return (
+            <div className="flex items-center justify-center min-h-[200px] text-secondary-text">
+              No media yet
+            </div>
+          );
+          return (
+            <div className="flex flex-wrap">
+              {userMedia.map((item) => (
+                <div
+                  key={item.id}
+                  className="w-1/3 aspect-square cursor-pointer"
+                  onClick={() => setMediaViewer({ tweetId: item.tweet_id, imageUrl: item.image_url })}
+                >
+                  <Image
+                    src={item.image_url}
+                    alt="Media"
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          );
+        }
+
+        const isLikesTab = activeTab === "Likes";
+        const loading = isLikesTab ? likesLoading : tweetsLoading;
+        const tweets = isLikesTab ? likedTweets : userTweets;
+        if (loading) return (
+          <div className="flex items-center justify-center min-h-[200px]">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        );
+        return (
+          <div className="flex flex-col gap-3">
+            {tweets?.map((tweet: Tweet) => (
             <div
-              key={tweet.id}
-              className="flex w-full px-4 py-3 border-b border-border"
+              key={tweet.retweet_key || tweet.id}
+              className="flex flex-col w-full px-4 py-3 border-b border-border"
             >
+              {tweet.retweeted_by && (
+                <div className="flex items-center gap-2 ml-[40px] mb-1 text-secondary-text text-[13px]">
+                  <FiRepeat size={14} />
+                  <span className="font-bold">
+                    {tweet.retweeted_by.name} reposted
+                  </span>
+                </div>
+              )}
+              <div className="flex">
               <Link href={`/${tweet.profiles?.username || username}`}>
                 <Image
                   src={tweet.profiles?.avatar_url || "/images/default-avatar.svg"}
@@ -235,22 +293,29 @@ export default function ProfilePage({ username }: { username: string }) {
                 </div>
                 <Link href={`/home/post/${tweet.id}`} className="text-white mb-2 block">
                   <p className="text-[15px] font-[400] leading-[1.3]">{tweet.content}</p>
-                  {tweet.image_url && (
+                </Link>
+                {tweet.image_url && (
+                  <div
+                    className="mb-2 cursor-pointer"
+                    onClick={() => setMediaViewer({ tweetId: tweet.id, imageUrl: tweet.image_url! })}
+                  >
                     <Image
                       src={tweet.image_url}
                       alt="Tweet image"
                       width={600}
                       height={400}
-                      className="w-full mt-2 rounded-2xl border border-border object-cover"
+                      className="w-full rounded-2xl border border-border object-cover"
                     />
-                  )}
-                </Link>
+                  </div>
+                )}
                 <TweetActions tweet={tweet} />
+              </div>
               </div>
             </div>
           ))}
-        </div>
-      )}
+          </div>
+        );
+      })()}
 
       {showEditProfile && profile && (
         <EditProfileModal
@@ -262,6 +327,13 @@ export default function ProfilePage({ username }: { username: string }) {
             avatar_url: profile.avatar_url || null,
             created_at: profile.created_at || "",
           }}
+        />
+      )}
+      {mediaViewer && (
+        <MediaViewerModal
+          tweetId={mediaViewer.tweetId}
+          imageUrl={mediaViewer.imageUrl}
+          onClose={() => setMediaViewer(null)}
         />
       )}
     </div>

@@ -4,11 +4,34 @@ export const createComment = async (
   userId: string,
   tweetId: string,
   content: string,
+  commentImage: File | null = null,
 ) => {
+  let imageUrl: null | string = null;
+  let imagePath: null | string = null;
+
+  if (commentImage) {
+    const timestamp = Date.now();
+    const path = `comments/${timestamp}_${commentImage.name}`;
+    const { error: imgError } = await supabase.storage
+      .from("tweet-images")
+      .upload(path, commentImage);
+    if (imgError) {
+      console.error("CommentImageUploadError:", imgError.message);
+    } else {
+      const { data: { publicUrl } } = supabase.storage
+        .from("tweet-images")
+        .getPublicUrl(path);
+      imageUrl = publicUrl;
+      imagePath = path;
+    }
+  }
+
   const { error: insertError } = await supabase.from("comments").insert({
     user_id: userId,
     tweet_id: tweetId,
     content,
+    image_url: imageUrl,
+    image_path: imagePath,
   });
   if (insertError) {
     console.error("Error creating comment:", insertError.message);

@@ -37,6 +37,9 @@ export const useGetUser = () => {
       if (data) {
         profileCache[userId] = data;
         setProfile(data);
+      } else {
+        // Profile was deleted — sign out the stale session
+        await supabase.auth.signOut();
       }
     };
     fetchProfile();

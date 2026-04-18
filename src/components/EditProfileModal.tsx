@@ -6,6 +6,7 @@ import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCameraOutline } from "react-icons/io5";
 import { supabase } from "@/lib/SupabaseClient";
+import { resizeImage } from "@/lib/resizeImage";
 import { useQueryClient } from "@tanstack/react-query";
 import { profileCache } from "@/custom-hooks/useGetUser";
 
@@ -60,9 +61,10 @@ export default function EditProfileModal({
     }
 
     // Upload avatar if changed
-    const file = fileInputRef.current?.files?.[0];
+    let file = fileInputRef.current?.files?.[0];
     if (file) {
-      const fileExt = file.name.split(".").pop();
+      file = await resizeImage(file, 400);
+      const fileExt = "jpg";
       const filePath = `${profile.id}/avatar.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage

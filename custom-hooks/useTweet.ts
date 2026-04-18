@@ -1,4 +1,4 @@
-import { createTweet, getTweets, getTweetById, deleteTweet } from "@/services/tweets";
+import { createTweet, getTweets, getTweetById, deleteTweet, getFollowingTweets, getUserTweetsAndRetweets, getUserMedia } from "@/services/tweets";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const usePostTweet = () => {
@@ -48,6 +48,30 @@ export const useGetTweetsByUserId = (userId: string) => {
   return useQuery({
     queryKey: ["tweets", "user", userId],
     queryFn: () => getTweets(userId),
+    enabled: !!userId,
+  });
+};
+
+export const useGetFollowingTweets = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: ["tweets", "following", userId],
+    queryFn: () => getFollowingTweets(userId!),
+    enabled: !!userId,
+  });
+};
+
+export const useGetUserTweetsAndRetweets = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: ["tweets", "user", userId, "with-retweets"],
+    queryFn: () => getUserTweetsAndRetweets(userId!),
+    enabled: !!userId,
+  });
+};
+
+export const useGetUserMedia = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: ["userMedia", userId],
+    queryFn: () => getUserMedia(userId!),
     enabled: !!userId,
   });
 };

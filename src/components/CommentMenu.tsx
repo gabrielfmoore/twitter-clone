@@ -16,6 +16,7 @@ import { MdBlock } from "react-icons/md";
 import { PiSmileySad } from "react-icons/pi";
 import { VscFlag } from "react-icons/vsc";
 import { useDeleteComment } from "@/custom-hooks/useComment";
+import { useIsFollowing, useToggleFollow } from "@/custom-hooks/useFollow";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
 interface CommentMenuProps {
@@ -41,30 +42,42 @@ const ownerItems: { icon: React.ComponentType<{ size?: number; className?: strin
 
 type MenuItem = { icon: React.ComponentType<{ size?: number; className?: string }>; label: string; red?: boolean };
 
-const getOtherItems = (username: string): MenuItem[] => [
-  { icon: PiSmileySad, label: "Not interested in this post" },
-  { icon: RiUserUnfollowLine, label: `Unfollow @${username}` },
-  { icon: LuList, label: "Add/remove from Lists" },
-  { icon: BiVolumeMute, label: `Mute @${username}` },
-  { icon: MdBlock, label: `Block @${username}` },
-  { icon: IoIosStats, label: "View post activity" },
-  { icon: LuCode, label: "Embed post" },
-  { icon: VscFlag, label: "Report post" },
-  { icon: LuMegaphone, label: "Request Community Note" },
-];
-
 export default function CommentMenu({ comment }: CommentMenuProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { profile } = useGetUser();
   const isOwner = profile?.id === comment.user_id;
-  const menuItems = isOwner ? ownerItems : getOtherItems(comment.profiles?.username || "");
+  const { data: isFollowing } = useIsFollowing(profile?.id, comment.user_id);
+  const { mutate: toggleFollow } = useToggleFollow();
+
+  const getOtherItemsDynamic = (username: string): MenuItem[] => [
+    { icon: PiSmileySad, label: "Not interested in this post" },
+    { icon: RiUserUnfollowLine, label: isFollowing ? `Unfollow @${username}` : `Follow @${username}` },
+    { icon: LuList, label: "Add/remove from Lists" },
+    { icon: BiVolumeMute, label: `Mute @${username}` },
+    { icon: MdBlock, label: `Block @${username}` },
+    { icon: IoIosStats, label: "View post activity" },
+    { icon: LuCode, label: "Embed post" },
+    { icon: VscFlag, label: "Report post" },
+    { icon: LuMegaphone, label: "Request Community Note" },
+  ];
+
+  const menuItems = isOwner ? ownerItems : getOtherItemsDynamic(comment.profiles?.username || "");
   const deleteMutation = useDeleteComment();
 
   const handleMenuClick = (label: string) => {
     if (label === "Delete") {
       setShowDeleteModal(true);
+      setDropdownOpen(false);
+    } else if (label.startsWith("Follow @") || label.startsWith("Unfollow @")) {
+      if (profile?.id) {
+        toggleFollow({
+          followerId: profile.id,
+          followingId: comment.user_id,
+          isFollowing: !!isFollowing,
+        });
+      }
       setDropdownOpen(false);
     }
   };

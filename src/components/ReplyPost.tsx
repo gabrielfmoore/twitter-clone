@@ -48,13 +48,14 @@ export default function ReplyPost({ tweetId }: { tweetId: string }) {
   };
 
   const PostComment = () => {
-    if (!reply.trim()) return;
+    if (!reply.trim() && !selectedImage) return;
     if (!userId) return;
+    const file = fileRef.current?.files?.[0] ?? null;
     mutate({
       userId,
       tweetId,
       content: reply,
-    
+      commentImage: file,
     },{
       onSuccess: () => {
         setReply("");

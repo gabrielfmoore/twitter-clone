@@ -14,4 +14,10 @@ export type Tweet = {
     username: string;
   };
   comments: { count: number }[];
+  retweeted_by?: {
+    id: string;
+    name: string;
+    username: string;
+  };
+  retweet_key?: string;
 };

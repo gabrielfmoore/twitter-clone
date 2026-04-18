@@ -28,7 +28,7 @@ export default function Profile({ collapsed = false }: { collapsed?: boolean }) 
   return (
     <div
       ref={ref}
-      className={`relative flex justify-center items-center w-full ${collapsed ? "" : "sm:justify-between 2xl:mr-1"}`}
+      className={`relative flex justify-center items-center w-full ${collapsed ? "" : "2xl:justify-between 2xl:mr-1"}`}
     >
       <div
         onClick={() => setLogoutOpen(!logoutOpen)}

@@ -36,7 +36,7 @@ export default function Page() {
         ))}
       </div>
       <CreatePost />
-      <Posts />
+      <Posts tab={activeTab} />
     </div>
   );
 }

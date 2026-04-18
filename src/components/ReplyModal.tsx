@@ -14,6 +14,8 @@ import { Tweet } from "@/types/types";
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { useCreateComment } from "@/custom-hooks/useComment";
 import { useEffect, useRef, useState } from "react";
+import { RxCross2 } from "react-icons/rx";
+import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { formatTweetDate } from "@/lib/formatDate";
 
 interface ReplyModalProps {
@@ -24,7 +26,11 @@ interface ReplyModalProps {
 export default function ReplyModal({ tweet, onClose }: ReplyModalProps) {
   const { profile, session } = useGetUser();
   const [reply, setReply] = useState("");
-  const isDisabled = reply.trim() === "";
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiRef = useRef<HTMLDivElement>(null);
+  const isDisabled = reply.trim() === "" && !selectedImage;
   const modalRef = useRef<HTMLDivElement>(null);
   const { mutate, isPending } = useCreateComment();
 
@@ -45,13 +51,26 @@ export default function ReplyModal({ tweet, onClose }: ReplyModalProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!showEmojiPicker) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showEmojiPicker]);
+
   const handleReply = () => {
-    if (!reply.trim() || !session?.user.id) return;
+    if ((!reply.trim() && !selectedImage) || !session?.user.id) return;
+    const file = fileInputRef.current?.files?.[0] ?? null;
     mutate(
-      { userId: session.user.id, tweetId: tweet.id, content: reply },
+      { userId: session.user.id, tweetId: tweet.id, content: reply, commentImage: file },
       {
         onSuccess: () => {
           setReply("");
+          setSelectedImage(null);
           onClose();
         },
       },
@@ -136,6 +155,36 @@ export default function ReplyModal({ tweet, onClose }: ReplyModalProps) {
                 rows={1}
                 className="w-full py-1 text-white text-[21px] placeholder:text-secondary-text placeholder:font-normal outline-none bg-transparent resize-none field-sizing-content"
               />
+              {selectedImage && (
+                <div className="relative mt-2 rounded-2xl overflow-hidden border border-border">
+                  <Image
+                    src={selectedImage}
+                    alt="Selected"
+                    width={500}
+                    height={300}
+                    className="w-full max-h-[300px] object-cover"
+                  />
+                  <button
+                    onClick={() => {
+                      setSelectedImage(null);
+                      if (fileInputRef.current) fileInputRef.current.value = "";
+                    }}
+                    className="absolute top-2 right-2 bg-black/70 w-8 h-8 flex items-center justify-center rounded-full cursor-pointer hover:bg-black/90"
+                  >
+                    <RxCross2 size={18} className="text-white" />
+                  </button>
+                </div>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) setSelectedImage(URL.createObjectURL(file));
+                }}
+                className="hidden"
+              />
             </div>
           </div>
         </div>
@@ -143,7 +192,7 @@ export default function ReplyModal({ tweet, onClose }: ReplyModalProps) {
         {/* Footer with icons + reply button */}
         <div className="relative h-[58px] sm:h-auto flex items-center justify-between ml-2 mr-6 pl-2 mt-2 py-[9px]">
           <div className="flex gap-[18px] pl-1 sm:pl-[3px] translate-y-[-1px] sm:translate-y-0">
-            <div className="text-primary cursor-pointer">
+            <div className="text-primary cursor-pointer" onClick={() => fileInputRef.current?.click()}>
               <TbPhoto size={18} className="translate-y-[1px]" />
             </div>
             <div className="text-primary cursor-pointer">
@@ -165,11 +214,25 @@ export default function ReplyModal({ tweet, onClose }: ReplyModalProps) {
             <div className="text-primary cursor-pointer translate-x-[-4px]">
               <CiBoxList size={20} />
             </div>
-            <div className="text-primary cursor-pointer">
-              <FaRegFaceSmile
-                size={17}
-                className="translate-x-[-5px] translate-y-[1px]"
-              />
+            <div ref={emojiRef} className="relative">
+              <div
+                className="text-primary cursor-pointer"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                <FaRegFaceSmile
+                  size={17}
+                  className="translate-x-[-5px] translate-y-[1px]"
+                />
+              </div>
+              {showEmojiPicker && (
+                <div className="absolute z-10 bottom-full left-0 mb-2 w-[320px] border border-border rounded-lg">
+                  <EmojiPicker
+                    onEmojiClick={(emojiData: EmojiClickData) => setReply((prev) => prev + emojiData.emoji)}
+                    theme={Theme.DARK}
+                    style={{ width: "320", background: "black" }}
+                  />
+                </div>
+              )}
             </div>
             <div className="text-primary cursor-pointer translate-x-[-6px]">
               <RiCalendarScheduleLine size={18} />

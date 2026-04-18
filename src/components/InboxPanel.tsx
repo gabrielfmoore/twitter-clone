@@ -19,7 +19,6 @@ import {
   IoChevronForward,
   IoPersonOutline,
   IoPeopleOutline,
-  IoAdd,
   IoChevronDown,
 } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -95,7 +94,7 @@ export default function InboxPanel() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 text-white font-bold pr-2 pl-4 py-[6px] rounded-full hover:bg-hover cursor-pointer border border-border"
+              className="flex items-center gap-1 text-white text-[15px] font-bold pr-2 pl-4 py-[6px] rounded-full hover:bg-hover cursor-pointer border border-border"
             >
               All <IoChevronDown size={18} className="text-secondary-text" />
             </button>
@@ -158,7 +157,6 @@ export default function InboxPanel() {
           >
             <div className="relative">
               <TbMessageCirclePlus size={20} className="text-white" />
-              
             </div>
           </button>
         </div>
@@ -168,12 +166,14 @@ export default function InboxPanel() {
       <div ref={searchRef} className="relative">
         <div className="flex items-center h-[50px] px-4 py-1 mb-4">
           <div
-            className={`flex items-center gap-2 w-full h-full rounded-full px-3 border ${searchFocused ? "border-primary bg-transparent" : "border-white/5 bg-bg-grey"}`}
+            className={`flex items-center gap-2 w-full h-full rounded-full px-3 border ${searchFocused ? "border-primary bg-transparent" : "border-white/5 bg-bg-grey justify-center"}`}
           >
             <IoSearchOutline
               size={20}
               className={
-                searchFocused ? "text-primary shrink-0" : "text-secondary-text shrink-0"
+                searchFocused
+                  ? "text-primary shrink-0"
+                  : "text-secondary-text shrink-0"
               }
             />
             <input
@@ -182,7 +182,7 @@ export default function InboxPanel() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setSearchFocused(true)}
               placeholder="Search"
-              className="bg-transparent text-white text-[15px] outline-none w-full placeholder:text-secondary-text text-center"
+              className={`bg-transparent text-white text-[15px] outline-none placeholder:text-secondary-text ${searchFocused ? "w-full" : "w-[50px]"}`}
             />
           </div>
         </div>
@@ -220,40 +220,38 @@ export default function InboxPanel() {
                   No people found
                 </p>
               )
+            ) : /* Recent conversations when search is empty/short */
+            conversations && conversations.length > 0 ? (
+              conversations.slice(0, 5).map((convo) => (
+                <button
+                  key={convo.id}
+                  onClick={() => handleSelectConversation(convo.id)}
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-hover cursor-pointer w-full text-left"
+                >
+                  <Image
+                    src={
+                      convo.otherUser?.avatar_url ||
+                      "/images/default-avatar.svg"
+                    }
+                    alt={convo.otherUser?.name || "User"}
+                    width={40}
+                    height={40}
+                    className="rounded-full w-10 h-10 object-cover shrink-0"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-[15px]">
+                      {convo.otherUser?.name}
+                    </span>
+                    <span className="text-secondary-text text-[13px]">
+                      @{convo.otherUser?.username}
+                    </span>
+                  </div>
+                </button>
+              ))
             ) : (
-              /* Recent conversations when search is empty/short */
-              conversations && conversations.length > 0 ? (
-                conversations.slice(0, 5).map((convo) => (
-                  <button
-                    key={convo.id}
-                    onClick={() => handleSelectConversation(convo.id)}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-hover cursor-pointer w-full text-left"
-                  >
-                    <Image
-                      src={
-                        convo.otherUser?.avatar_url ||
-                        "/images/default-avatar.svg"
-                      }
-                      alt={convo.otherUser?.name || "User"}
-                      width={40}
-                      height={40}
-                      className="rounded-full w-10 h-10 object-cover shrink-0"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-white font-bold text-[15px]">
-                        {convo.otherUser?.name}
-                      </span>
-                      <span className="text-secondary-text text-[13px]">
-                        @{convo.otherUser?.username}
-                      </span>
-                    </div>
-                  </button>
-                ))
-              ) : (
-                <p className="text-secondary-text text-[14px] px-4 py-6 text-center">
-                  No recent conversations
-                </p>
-              )
+              <p className="text-secondary-text text-[14px] px-4 py-6 text-center">
+                No recent conversations
+              </p>
             )}
           </div>
         )}
@@ -267,13 +265,14 @@ export default function InboxPanel() {
           </div>
         ) : !conversations || conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center pt-20 px-8">
-            <IoChatbubbleOutline size={48} className="text-secondary-text mb-4" />
+            <IoChatbubbleOutline
+              size={48}
+              className="text-secondary-text mb-4"
+            />
             <h3 className="text-white text-[24px] font-bold mb-1">
               Empty inbox
             </h3>
-            <p className="text-secondary-text text-[15px]">
-              Message someone
-            </p>
+            <p className="text-secondary-text text-[15px]">Message someone</p>
           </div>
         ) : (
           <div>
@@ -292,25 +291,27 @@ export default function InboxPanel() {
                   height={56}
                   className="rounded-full w-14 h-14 object-cover shrink-0"
                 />
-                <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-white font-bold text-[15px] truncate">
-                    {convo.otherUser?.name}
-                  </span>
-                  {convo.lastMessage && (
-                    <p className="text-secondary-text text-[14px] truncate">
-                      {convo.lastMessage.sender_id === userId && "You: "}
-                      {convo.lastMessage.content}
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-col items-end shrink-0 gap-1">
-                  {convo.lastMessage && (
-                    <span className="text-secondary-text text-[13px]">
-                      {formatTweetDate(convo.lastMessage.created_at)}
+                <div className="flex items-center gap-3 border-b border-border h-full w-full min-w-0">
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="text-white font-bold text-[15px] truncate">
+                      {convo.otherUser?.name}
                     </span>
-                  )}
-                  {/* Unread dot — hidden for now, tied to future unread state */}
-                  <div className="w-[8px] h-[8px] rounded-full bg-primary invisible" />
+                    {convo.lastMessage && (
+                      <p className="text-secondary-text text-[14px] truncate">
+                        {convo.lastMessage.sender_id === userId && "You: "}
+                        {convo.lastMessage.content}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end shrink-0 gap-1">
+                    {convo.lastMessage && (
+                      <span className="text-secondary-text text-[13px]">
+                        {formatTweetDate(convo.lastMessage.created_at)}
+                      </span>
+                    )}
+                    {/* Unread dot — hidden for now, tied to future unread state */}
+                    <div className="w-[8px] h-[8px] rounded-full bg-primary " />
+                  </div>
                 </div>
               </Link>
             ))}

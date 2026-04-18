@@ -7,6 +7,7 @@ import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 import { IoCameraOutline, IoNotificationsOutline, IoClose } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { supabase } from "../../lib/SupabaseClient";
+import { resizeImage } from "../../lib/resizeImage";
 
 interface ProfileSetupModalProps {
   isOpen: boolean;
@@ -29,10 +30,12 @@ export default function ProfileSetupModal({ isOpen }: ProfileSetupModalProps) {
   }
 
   async function handleUpload() {
-    const file = fileInputRef.current?.files?.[0];
+    let file = fileInputRef.current?.files?.[0];
     if (!file) return;
 
     setUploading(true);
+
+    file = await resizeImage(file, 400);
 
     const {
       data: { user },
@@ -44,8 +47,7 @@ export default function ProfileSetupModal({ isOpen }: ProfileSetupModalProps) {
       return;
     }
 
-    const fileExt = file.name.split(".").pop();
-    const filePath = `${user.id}/avatar.${fileExt}`;
+    const filePath = `${user.id}/avatar.jpg`;
 
     const { error: uploadError } = await supabase.storage
       .from("avatars")

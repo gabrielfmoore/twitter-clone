@@ -7,7 +7,7 @@ export default function MessagesLayout({
   return (
     <div suppressHydrationWarning className="flex sm:justify-center max-w-[100vw]">
       <LeftSidebar collapsed />
-      <div className="flex-1 sm:flex-none min-w-0 min-h-screen">
+      <div className="flex-1 sm:flex-none min-w-0 min-h-screen lg:mr-[9px] 2xl:mr-[10px] md:mr-22 ">
         {children}
       </div>
     </div>

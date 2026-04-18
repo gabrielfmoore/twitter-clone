@@ -11,7 +11,7 @@ import { HiOutlineUserAdd } from "react-icons/hi";
 import { IoChatbubbleOutline, IoSearchOutline } from "react-icons/io5";
 import { HiUser, HiOutlineUser } from "react-icons/hi2";
 
-import { TbDotsCircleHorizontal } from "react-icons/tb";
+import { TbDotsCircleHorizontal, TbMessageCircleFilled } from "react-icons/tb";
 import Grok from "../../public/images/grok-icon.png";
 import { FaFeatherAlt, FaRegBookmark } from "react-icons/fa";
 import { LuRocket } from "react-icons/lu";
@@ -33,17 +33,18 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
 
   return (
     <aside className={`sticky top-0 left-0 shrink-0 h-screen flex justify-center ${collapsed ? "" : "lg:justify-end 2xl:overflow-x-clip md:ml-[calc(-33vw+242px)] lg:ml-0"}`}>
-      <div className={`flex flex-col items-end h-screen ${collapsed ? "border-border border-r w-[69px] xs:w-[88px]" : "w-[68px] xs:w-[88px] md:w-[72px] lg:w-[87px] 2xl:w-[278px] 2xl:pr-1 xl:pr-[3px] lg:pr-[1px] md:pr-[14px] lg:ml-[1px] xl:ml-[11px] 2xl:ml-[7px]"}`}>
+      <div className={`flex flex-col items-end h-screen ${collapsed ? "border-border border-r w-[69px] xs:w-[88px] 2xl:w-[69px] xl:pr-[1px] 2xl:pr-[1px]" : "w-[68px] xs:w-[88px] md:w-[72px] lg:w-[87px] 2xl:w-[278px] 2xl:pr-1 xl:pr-[7px] lg:pr-[1px] md:pr-[14px] lg:ml-[1px] xl:ml-[11px] 2xl:ml-[7px]"}`}>
         <div className={`flex items-center justify-center pt-1 h-[53px] w-full ${collapsed ? "" : "2xl:justify-start 2xl:px-[7px]"}`}>
           <Link
             href="/"
             suppressHydrationWarning
-            className={`p-[11px] ${collapsed ? "" : "2xl:p-[16px]"} text-white rounded-full hover:bg-hover`}
+            className={`p-[11px] relative ${collapsed ? "" : "2xl:p-[16px]"} text-white rounded-full hover:bg-hover`}
           >
             <FaXTwitter size={29} />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-[-8px] whitespace-nowrap text-[10px]">* not actually X!</div>
           </Link>
         </div>
-        <div className={`flex flex-col flex-1 overflow-y-auto scrollbar-hidden mt-[5px] [@media(min-height:855px)]:mt-[9px] pr-2 pl-2 items-center w-full gap-[2px] [@media(min-height:855px)]:gap-[10px] ${collapsed ? "" : "2xl:mt-[5px] 2xl:pr-[10px] 2xl:pl-[12px] 2xl:items-start 2xl:gap-[2px]"}`}>
+        <div className={`flex flex-col flex-1 overflow-y-auto scrollbar-hidden [&>*]:shrink-0 mt-[5px] [@media(min-height:855px)]:mt-[9px] pr-2 pl-2 items-center w-full gap-[2px] [@media(min-height:855px)]:gap-[10px] ${collapsed ? "" : "2xl:mt-[5px] 2xl:pr-[10px] 2xl:pl-[12px] 2xl:items-start 2xl:gap-[2px]"}`}>
           <Link
             href="/home"
             className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
@@ -99,7 +100,7 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
             className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
           >
             <div className={`shrink-0 flex justify-start ${collapsed ? "" : "2xl:w-[48px] 2xl:pl-[2px]"}`}>
-              <IoChatbubbleOutline size={27} />
+              {isChat ? <TbMessageCircleFilled size={29} /> : <IoChatbubbleOutline size={27} />}
             </div>
             <span
               className={`hidden ${collapsed ? "" : "2xl:inline"} text-xl xl:pr-4 ${isChat ? "font-extrabold" : "font-semibold"}`}
@@ -200,8 +201,8 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
           {showPostModal && (
             <CreatePostModal onClose={() => setShowPostModal(false)} />
           )}
-          <div className="mt-auto w-full">
-            <div className={`mt-[14px] mb-[12px] py-3 w-full text-white flex justify-center items-center ${collapsed ? "" : "2xl:mt-[24px] 2xl:ml-0 ml:[2px] sm:ml-[14px] md:ml-[2px] lg:pl-3 xl:justify-between"}`}>
+          <div className="mt-auto w-full pb-[env(safe-area-inset-bottom)]">
+            <div className={`mt-[14px] mb-[12px] xl:mr-1 py-3 w-full text-white flex justify-center items-center ${collapsed ? "" : "2xl:mt-[24px] 2xl:ml-0 ml:[2px] sm:ml-[14px] md:ml-[0] xl:justify-between"}`}>
               <Profile collapsed={collapsed} />
             </div>
           </div>

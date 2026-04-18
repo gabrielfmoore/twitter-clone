@@ -8,11 +8,13 @@ export const useCreateComment = () => {
       userId,
       tweetId,
       content,
+      commentImage,
     }: {
       userId: string;
       tweetId: string;
       content: string;
-    }) => createComment(userId, tweetId, content),
+      commentImage?: File | null;
+    }) => createComment(userId, tweetId, content, commentImage ?? null),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["comments", variables.tweetId],

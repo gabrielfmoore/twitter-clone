@@ -35,7 +35,47 @@ export const useSendMessage = () => {
       senderId: string;
       content: string;
     }) => sendMessage(conversationId, senderId, content),
-    onSuccess: (_, variables) => {
+    onMutate: async (variables) => {
+      // Cancel outgoing refetches so they don't overwrite our optimistic update
+      await queryClient.cancelQueries({
+        queryKey: ["messages", variables.conversationId],
+      });
+
+      // Snapshot current messages
+      const previousMessages = queryClient.getQueryData([
+        "messages",
+        variables.conversationId,
+      ]);
+
+      // Optimistically add the new message
+      queryClient.setQueryData(
+        ["messages", variables.conversationId],
+        (old: Array<Record<string, unknown>> | undefined) => [
+          ...(old || []),
+          {
+            id: `optimistic-${Date.now()}`,
+            conversation_id: variables.conversationId,
+            sender_id: variables.senderId,
+            content: variables.content,
+            created_at: new Date().toISOString(),
+            profiles: null,
+          },
+        ]
+      );
+
+      return { previousMessages };
+    },
+    onError: (_err, variables, context) => {
+      // Roll back to previous messages on failure
+      if (context?.previousMessages) {
+        queryClient.setQueryData(
+          ["messages", variables.conversationId],
+          context.previousMessages
+        );
+      }
+    },
+    onSettled: (_, __, variables) => {
+      // Refetch to get the real server data
       queryClient.invalidateQueries({
         queryKey: ["messages", variables.conversationId],
       });

@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { FaRegBookmark, FaRegComment } from "react-icons/fa6";
-import { FiRepeat } from "react-icons/fi";
 import { RiShare2Line } from "react-icons/ri";
 import ReplyModal from "./ReplyModal";
 import { Tweet } from "@/types/types";
 import { useGetComments } from "@/custom-hooks/useComment";
 import LikeButton from "./LikeButton";
+import RetweetButton from "./RetweetButton";
 
 export default function TweetActions({ tweet }: { tweet: Tweet }) {
   const [replyOpen, setReplyOpen] = useState(false);
@@ -26,12 +26,7 @@ export default function TweetActions({ tweet }: { tweet: Tweet }) {
           </div>
           <span className="text-sm">{commentCount || null}</span>
         </div>
-        <div className="flex items-center gap-1 hover:text-green-400 cursor-pointer group">
-          <div className="w-[34.75px] h-[34.75px] -m-2 flex items-center justify-center rounded-full group-hover:bg-green-400/12">
-            <FiRepeat />
-          </div>
-          <span className="text-sm">0</span>
-        </div>
+        <RetweetButton tweetId={tweet.id} />
         <LikeButton tweetId={tweet.id} />
         <div className="flex items-center gap-4">
           <div className="hover:text-blue-400 cursor-pointer group">

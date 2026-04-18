@@ -13,6 +13,7 @@ type Comment = {
   created_at: string;
   user_id: string;
   tweet_id: string;
+  image_url: string | null;
   profiles: {
     username: string;
     avatar_url: string;
@@ -73,6 +74,15 @@ export default function Comments({ tweetId }: { tweetId: string }) {
             <p className="text-white text-[15px] leading-[1.3] mt-1">
               {comment.content}
             </p>
+            {comment.image_url && (
+              <Image
+                src={comment.image_url}
+                alt="Comment image"
+                width={600}
+                height={400}
+                className="w-full mt-2 rounded-2xl border border-border object-cover"
+              />
+            )}
           </div>
         </div>
       ))}
