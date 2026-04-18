@@ -40,8 +40,8 @@ export const useGetComments = (tweetId: string) => {
 export const useDeleteComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ commentId }: { commentId: string; tweetId: string }) =>
-      deleteComment(commentId),
+    mutationFn: ({ commentId, imagePath }: { commentId: string; tweetId: string; imagePath?: string }) =>
+      deleteComment(commentId, imagePath),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["comments", variables.tweetId],

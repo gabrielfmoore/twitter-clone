@@ -49,11 +49,17 @@ export const getComments = async (tweetId: string) => {
   return data ?? [];
 }
 
-export const deleteComment = async (commentId: string) => {
+export const deleteComment = async (commentId: string, imagePath?: string) => {
   const { error } = await supabase.from("comments").delete().eq("id", commentId);
   if (error) {
     console.error("Error deleting comment:", error.message);
     throw error;
+  }
+  if (imagePath) {
+    const { error: imgError } = await supabase.storage.from("tweet-images").remove([imagePath]);
+    if (imgError) {
+      console.error("Error deleting comment image:", imgError.message);
+    }
   }
   return true;
 }

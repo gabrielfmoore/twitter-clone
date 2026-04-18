@@ -14,6 +14,7 @@ type Comment = {
   user_id: string;
   tweet_id: string;
   image_url: string | null;
+  image_path: string | null;
   profiles: {
     username: string;
     avatar_url: string;

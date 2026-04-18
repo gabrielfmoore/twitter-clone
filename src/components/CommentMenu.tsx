@@ -24,6 +24,8 @@ interface CommentMenuProps {
     id: string;
     user_id: string;
     tweet_id: string;
+    image_url?: string | null;
+    image_path?: string | null;
     profiles?: { username: string };
   };
 }
@@ -84,7 +86,7 @@ export default function CommentMenu({ comment }: CommentMenuProps) {
 
   const handleDeleteConfirm = () => {
     deleteMutation.mutate(
-      { commentId: comment.id, tweetId: comment.tweet_id },
+      { commentId: comment.id, tweetId: comment.tweet_id, imagePath: comment.image_path ?? undefined },
       {
         onSuccess: () => {
           setShowDeleteModal(false);
