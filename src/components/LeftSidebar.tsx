@@ -32,8 +32,8 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
   const isProfile = pathname === `/${profile?.username}`;
 
   return (
-    <aside className={`sticky top-0 left-0 shrink-0 h-screen flex justify-center ${collapsed ? "" : "lg:justify-end 2xl:overflow-x-clip md:ml-[calc(-33vw+242px)] lg:ml-0"}`}>
-      <div className={`flex flex-col items-end h-screen ${collapsed ? "border-border border-r w-[69px] xs:w-[88px] 2xl:w-[69px] xl:pr-[1px] 2xl:pr-[1px]" : "w-[68px] xs:w-[88px] md:w-[72px] lg:w-[87px] 2xl:w-[278px] 2xl:pr-1 xl:pr-[7px] lg:pr-[1px] md:pr-[14px] lg:ml-[1px] xl:ml-[11px] 2xl:ml-[7px]"}`}>
+    <aside className={`sticky top-0 left-0 shrink-0 h-dvh flex justify-center ${collapsed ? "" : "lg:justify-end 2xl:overflow-x-clip md:ml-[calc(-33vw+242px)] lg:ml-0"}`}>
+      <div className={`flex flex-col items-end h-dvh ${collapsed ? "border-border border-r w-[69px] xs:w-[88px] 2xl:w-[69px] xl:pr-[1px] 2xl:pr-[1px]" : "w-[68px] xs:w-[88px] md:w-[72px] lg:w-[87px] 2xl:w-[278px] 2xl:pr-1 xl:pr-[7px] lg:pr-[1px] md:pr-[14px] lg:ml-[1px] xl:ml-[11px] 2xl:ml-[7px]"}`}>
         <div className={`flex items-center justify-center pt-1 h-[53px] w-full ${collapsed ? "" : "2xl:justify-start 2xl:px-[7px]"}`}>
           <Link
             href="/"
@@ -201,7 +201,7 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
           {showPostModal && (
             <CreatePostModal onClose={() => setShowPostModal(false)} />
           )}
-          <div className="mt-auto w-full pb-[env(safe-area-inset-bottom)]">
+          <div className="mt-auto w-full">
             <div className={`mt-[14px] mb-[12px] xl:mr-1 py-3 w-full text-white flex justify-center items-center ${collapsed ? "" : "2xl:mt-[24px] 2xl:ml-0 ml:[2px] sm:ml-[14px] md:ml-[0] xl:justify-between"}`}>
               <Profile collapsed={collapsed} />
             </div>
