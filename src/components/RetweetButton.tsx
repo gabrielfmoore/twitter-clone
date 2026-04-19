@@ -1,7 +1,6 @@
 import { useToggleRetweet, useUserRetweet, useGetRetweetCount } from "@/custom-hooks/useRetweet";
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { FiRepeat } from "react-icons/fi";
-import { createNotification } from "@/services/notifications";
 
 export default function RetweetButton({ tweetId, tweetOwnerId }: { tweetId: string; tweetOwnerId?: string }) {
   const { session } = useGetUser();
@@ -11,13 +10,7 @@ export default function RetweetButton({ tweetId, tweetOwnerId }: { tweetId: stri
   const { mutate } = useToggleRetweet();
 
   const handleRetweet = () => {
-    mutate({ userId, tweetId, hasRetweeted: !!hasRetweeted }, {
-      onSuccess: () => {
-        if (!hasRetweeted && userId && tweetOwnerId) {
-          createNotification({ userId: tweetOwnerId, actorId: userId, type: "retweet", tweetId });
-        }
-      },
-    });
+    mutate({ userId, tweetId, hasRetweeted: !!hasRetweeted });
   };
 
   return (
@@ -26,10 +19,8 @@ export default function RetweetButton({ tweetId, tweetOwnerId }: { tweetId: stri
       suppressHydrationWarning
       className={`flex items-center gap-1 cursor-pointer group ${hasRetweeted ? "text-green-400" : "hover:text-green-400"}`}
     >
-      <div className={`w-[34.75px] h-[34.75px] -m-2 flex items-center justify-center rounded-full ${hasRetweeted ? "" : "group-hover:bg-green-400/12"}`}>
-        <FiRepeat />
-      </div>
-      <span className="text-sm">{retweetCount || null}</span>
+      <FiRepeat />
+      <span className="w-0 overflow-visible text-sm whitespace-nowrap">{retweetCount || null}</span>
     </button>
   );
 }

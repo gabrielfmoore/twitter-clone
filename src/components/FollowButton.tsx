@@ -3,7 +3,6 @@
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { useIsFollowing, useToggleFollow } from "@/custom-hooks/useFollow";
 import { useState } from "react";
-import { createNotification } from "@/services/notifications";
 
 interface FollowButtonProps {
   targetUserId: string;
@@ -28,13 +27,7 @@ export default function FollowButton({ targetUserId, className }: FollowButtonPr
         followingId: targetUserId,
         isFollowing: !!isFollowing,
       },
-      {
-        onSuccess: () => {
-          if (!isFollowing) {
-            createNotification({ userId: targetUserId, actorId: currentUserId, type: "follow" });
-          }
-        },
-      }
+      // No notification logic
     );
   };
 

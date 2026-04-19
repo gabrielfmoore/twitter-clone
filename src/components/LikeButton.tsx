@@ -1,8 +1,6 @@
 import { useToggleLike, useUserLike, useGetLikeCount } from "@/custom-hooks/useLike";
 import { useGetUser } from "@/custom-hooks/useGetUser";
-import React from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
-import { createNotification } from "@/services/notifications";
 
 export default function LikeButton({ tweetId, tweetOwnerId }: { tweetId: string; tweetOwnerId?: string }) {
   const { session } = useGetUser();
@@ -12,13 +10,8 @@ export default function LikeButton({ tweetId, tweetOwnerId }: { tweetId: string;
   const { mutate } = useToggleLike();
 
   const handleLike = () => {
-    mutate({ userId, tweetId, hasLiked: !!hasLiked }, {
-      onSuccess: () => {
-        if (!hasLiked && userId && tweetOwnerId) {
-          createNotification({ userId: tweetOwnerId, actorId: userId, type: "like", tweetId });
-        }
-      },
-    });
+    console.log("LikeButton userId:", userId, "tweetOwnerId:", tweetOwnerId);
+    mutate({ userId, tweetId, hasLiked: !!hasLiked });
   };
 
   return (
