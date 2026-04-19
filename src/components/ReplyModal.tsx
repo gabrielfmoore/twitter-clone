@@ -13,6 +13,7 @@ import Grok from "../../public/images/Grok-transparent.png";
 import { Tweet } from "@/types/types";
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { useCreateComment } from "@/custom-hooks/useComment";
+import { createNotification } from "@/services/notifications";
 import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
@@ -69,6 +70,9 @@ export default function ReplyModal({ tweet, onClose }: ReplyModalProps) {
       { userId: session.user.id, tweetId: tweet.id, content: reply, commentImage: file },
       {
         onSuccess: () => {
+          if (tweet.user_id) {
+            createNotification({ userId: tweet.user_id, actorId: session.user.id, type: "reply", tweetId: tweet.id });
+          }
           setReply("");
           setSelectedImage(null);
           onClose();

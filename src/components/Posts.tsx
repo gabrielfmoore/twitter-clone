@@ -71,22 +71,22 @@ export default function Posts({ tab = "For you" }: { tab?: string }) {
                   />
                 </Link>
                 <div className="flex flex-col w-full min-w-0">
-                  <div className="w-full wrap-nowrap justify-between flex ">
-                    <div className="flex justify-between gap-1 text-sm">
-                      <div className="flex gap-[2px] text-[15px] cursor-pointer ">
+                  <div className="w-full justify-between flex">
+                    <div className="flex flex-wrap gap-1 text-sm min-w-0">
+                      <div className="flex flex-wrap gap-[2px] text-[15px] cursor-pointer min-w-0">
                         <Link href={`/${tweet.profiles?.username || profile?.username || ""}`}>
-                          <span className="text-white font-bold hover:underline">
+                          <span className="text-white font-bold hover:underline whitespace-nowrap">
                             {tweet.profiles?.name}
                           </span>
                         </Link>
-                        <MdVerified className="text-primary mt-[2px] w-[17px] h-[17px]" />
-                        <span className="text-secondary-text font-light ml-[3px]">
+                        <MdVerified className="text-primary mt-[2px] w-[17px] h-[17px] shrink-0" />
+                        <span className="text-secondary-text font-light ml-[3px] whitespace-nowrap">
                           @{tweet.profiles?.username}
                         </span>
                         <span className="text-secondary-text font-light ml-[2px]">
                           ·
                         </span>
-                        <p className="text-secondary-text hover:underline">
+                        <p className="text-secondary-text hover:underline whitespace-nowrap">
                           {formatTweetDate(tweet.created_at)}
                         </p>
                       </div>

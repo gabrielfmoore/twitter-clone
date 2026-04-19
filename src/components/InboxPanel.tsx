@@ -6,6 +6,7 @@ import {
   useGetConversations,
   useSearchUsers,
   useGetOrCreateConversation,
+  useUnreadConversations,
 } from "@/custom-hooks/useChat";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -29,6 +30,8 @@ export default function InboxPanel() {
   const { session } = useGetUser();
   const userId = session?.user.id;
   const { data: conversations, isLoading } = useGetConversations(userId);
+  const { data: unreadConvos } = useUnreadConversations(userId);
+  const unreadSet = new Set(unreadConvos || []);
   const [showNewConvo, setShowNewConvo] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
@@ -309,8 +312,10 @@ export default function InboxPanel() {
                         {formatTweetDate(convo.lastMessage.created_at)}
                       </span>
                     )}
-                    {/* Unread dot — hidden for now, tied to future unread state */}
-                    <div className="w-[8px] h-[8px] rounded-full bg-primary " />
+                    {/* Unread dot — only shown for unread conversations */}
+                    {unreadSet.has(convo.id) && (
+                      <div className="w-[8px] h-[8px] rounded-full bg-primary" />
+                    )}
                   </div>
                 </div>
               </Link>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetUser } from "@/custom-hooks/useGetUser";
-import { useGetMessages, useSendMessage } from "@/custom-hooks/useChat";
+import { useGetMessages, useSendMessage, useMarkConversationRead } from "@/custom-hooks/useChat";
 import { useRealtimeMessages } from "@/custom-hooks/useRealtimeMessages";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +18,7 @@ export default function ConversationPage() {
   const userId = session?.user.id;
   const { data: messages, isLoading } = useGetMessages(conversationId);
   const { mutate: send } = useSendMessage();
+  const { mutate: markRead } = useMarkConversationRead();
   const [content, setContent] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -51,6 +52,13 @@ export default function ConversationPage() {
     };
     fetchOtherUser();
   }, [conversationId, userId]);
+
+  // Mark conversation as read when opened and when messages update
+  useEffect(() => {
+    if (userId && conversationId) {
+      markRead({ userId, conversationId });
+    }
+  }, [userId, conversationId, messages, markRead]);
 
   // Scroll to bottom when messages change
   useEffect(() => {

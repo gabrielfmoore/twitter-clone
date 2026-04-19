@@ -11,8 +11,9 @@ import { MdOutlineGifBox } from "react-icons/md";
 import { RiFlag2Line } from "react-icons/ri";
 import { useUserSession } from "@/custom-hooks/useUserSession";
 import { useCreateComment } from "@/custom-hooks/useComment";
+import { createNotification } from "@/services/notifications";
 
-export default function ReplyPost({ tweetId }: { tweetId: string }) {
+export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; tweetOwnerId?: string }) {
   const [reply, setReply] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const isDisabled = reply.trim() === "" && !selectedImage;
@@ -58,6 +59,9 @@ export default function ReplyPost({ tweetId }: { tweetId: string }) {
       commentImage: file,
     },{
       onSuccess: () => {
+        if (userId && tweetOwnerId) {
+          createNotification({ userId: tweetOwnerId, actorId: userId, type: "reply", tweetId });
+        }
         setReply("");
         setSelectedImage(null);
         if (fileRef.current) fileRef.current.value = "";

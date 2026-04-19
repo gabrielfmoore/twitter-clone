@@ -138,6 +138,59 @@ export const getOrCreateConversation = async (
   return newConvoId as string;
 };
 
+// Mark a conversation as read (upsert last_read_at)
+export const markConversationRead = async (userId: string, conversationId: string) => {
+  const { error } = await supabase
+    .from("conversation_reads")
+    .upsert(
+      { user_id: userId, conversation_id: conversationId, last_read_at: new Date().toISOString() },
+      { onConflict: "user_id,conversation_id" }
+    );
+  if (error) console.error("MarkConversationReadError:", error.message);
+};
+
+// Get IDs of conversations with unread messages
+export const getUnreadConversationIds = async (userId: string) => {
+  const { data: participations, error: partErr } = await supabase
+    .from("conversation_participants")
+    .select("conversation_id")
+    .eq("user_id", userId);
+  if (partErr || !participations?.length) return [];
+
+  const convIds = participations.map((p) => p.conversation_id);
+
+  const { data: messages, error: msgErr } = await supabase
+    .from("messages")
+    .select("conversation_id, created_at, sender_id")
+    .in("conversation_id", convIds)
+    .order("created_at", { ascending: false });
+  if (msgErr || !messages?.length) return [];
+
+  const { data: reads } = await supabase
+    .from("conversation_reads")
+    .select("conversation_id, last_read_at")
+    .eq("user_id", userId)
+    .in("conversation_id", convIds);
+
+  const readMap = new Map((reads || []).map((r) => [r.conversation_id, r.last_read_at]));
+
+  const latestPerConvo = new Map<string, string>();
+  for (const msg of messages) {
+    if (msg.sender_id !== userId && !latestPerConvo.has(msg.conversation_id)) {
+      latestPerConvo.set(msg.conversation_id, msg.created_at);
+    }
+  }
+
+  const unread: string[] = [];
+  for (const [convId, latestAt] of latestPerConvo) {
+    const lastRead = readMap.get(convId);
+    if (!lastRead || new Date(latestAt) > new Date(lastRead)) {
+      unread.push(convId);
+    }
+  }
+  return unread;
+};
+
 // Search users by username or name (for new conversation)
 export const searchUsers = async (query: string, currentUserId: string) => {
   const { data, error } = await supabase

@@ -4,6 +4,8 @@ import {
   sendMessage,
   getOrCreateConversation,
   searchUsers,
+  markConversationRead,
+  getUnreadConversationIds,
 } from "@/services/chat";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -103,5 +105,25 @@ export const useSearchUsers = (query: string, currentUserId: string | undefined)
     queryKey: ["searchUsers", query],
     queryFn: () => searchUsers(query, currentUserId!),
     enabled: query.length >= 2 && !!currentUserId,
+  });
+};
+
+export const useUnreadConversations = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: ["unreadConversations", userId],
+    queryFn: () => getUnreadConversationIds(userId!),
+    enabled: !!userId,
+    refetchInterval: 30000,
+  });
+};
+
+export const useMarkConversationRead = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, conversationId }: { userId: string; conversationId: string }) =>
+      markConversationRead(userId, conversationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["unreadConversations"] });
+    },
   });
 };

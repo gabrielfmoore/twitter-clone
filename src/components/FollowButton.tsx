@@ -3,6 +3,7 @@
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import { useIsFollowing, useToggleFollow } from "@/custom-hooks/useFollow";
 import { useState } from "react";
+import { createNotification } from "@/services/notifications";
 
 interface FollowButtonProps {
   targetUserId: string;
@@ -21,11 +22,20 @@ export default function FollowButton({ targetUserId, className }: FollowButtonPr
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleFollow({
-      followerId: currentUserId,
-      followingId: targetUserId,
-      isFollowing: !!isFollowing,
-    });
+    toggleFollow(
+      {
+        followerId: currentUserId,
+        followingId: targetUserId,
+        isFollowing: !!isFollowing,
+      },
+      {
+        onSuccess: () => {
+          if (!isFollowing) {
+            createNotification({ userId: targetUserId, actorId: currentUserId, type: "follow" });
+          }
+        },
+      }
+    );
   };
 
   if (isFollowing) {

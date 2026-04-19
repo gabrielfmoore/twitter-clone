@@ -18,11 +18,16 @@ import { LuRocket } from "react-icons/lu";
 import Profile from "./Profile";
 import CreatePostModal from "./CreatePostModal";
 import { useGetUser } from "@/custom-hooks/useGetUser";
+import { useUnreadNotificationCount } from "@/custom-hooks/useNotification";
+import { useUnreadConversations } from "@/custom-hooks/useChat";
 
 export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean }) {
   const { profile } = useGetUser();
   const pathname = usePathname();
   const [showPostModal, setShowPostModal] = useState(false);
+  const userId = profile?.id;
+  const { data: unreadNotifCount } = useUnreadNotificationCount(userId);
+  const { data: unreadConvos } = useUnreadConversations(userId);
 
   const isHome = pathname === "/home";
   const isExplore = false;
@@ -41,7 +46,7 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
             className={`p-[11px] relative ${collapsed ? "" : "2xl:p-[16px]"} text-white rounded-full hover:bg-hover`}
           >
             <FaXTwitter size={29} />
-            <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-[-8px] whitespace-nowrap text-[10px]">* not actually X!</div>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-[-8px] whitespace-nowrap text-[10px]">* clone</div>
           </Link>
         </div>
         <div className={`flex flex-col flex-1 overflow-y-auto scrollbar-hidden [&>*]:shrink-0 mt-[5px] [@media(min-height:855px)]:mt-[9px] pr-2 pl-2 items-center w-full gap-[2px] [@media(min-height:855px)]:gap-[10px] ${collapsed ? "" : "2xl:mt-[5px] 2xl:pr-[10px] 2xl:pl-[12px] 2xl:items-start 2xl:gap-[2px]"}`}>
@@ -75,8 +80,13 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
             href="#"
             className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
           >
-            <div className={`shrink-0 flex justify-start ${collapsed ? "" : "2xl:w-[48px]"}`}>
+            <div className={`shrink-0 flex justify-start relative ${collapsed ? "" : "2xl:w-[48px]"}`}>
               <BiBell size={29} />
+              {!!unreadNotifCount && unreadNotifCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[11px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-[5px]">
+                  {unreadNotifCount > 99 ? "99+" : unreadNotifCount}
+                </span>
+              )}
             </div>
             <span className={`hidden ${collapsed ? "" : "2xl:inline"} text-xl font-semibold xl:pr-4`}>
               Notifications
@@ -99,8 +109,13 @@ export default function LeftSidebar({ collapsed = false }: { collapsed?: boolean
             href="/home/messages"
             className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
           >
-            <div className={`shrink-0 flex justify-start ${collapsed ? "" : "2xl:w-[48px] 2xl:pl-[2px]"}`}>
+            <div className={`shrink-0 flex justify-start relative ${collapsed ? "" : "2xl:w-[48px] 2xl:pl-[2px]"}`}>
               {isChat ? <TbMessageCircleFilled size={29} /> : <IoChatbubbleOutline size={27} />}
+              {unreadConvos && unreadConvos.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[11px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-[5px]">
+                  {unreadConvos.length > 99 ? "99+" : unreadConvos.length}
+                </span>
+              )}
             </div>
             <span
               className={`hidden ${collapsed ? "" : "2xl:inline"} text-xl xl:pr-4 ${isChat ? "font-extrabold" : "font-semibold"}`}

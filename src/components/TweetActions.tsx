@@ -26,8 +26,8 @@ export default function TweetActions({ tweet }: { tweet: Tweet }) {
           </div>
           <span className="text-sm">{commentCount || null}</span>
         </div>
-        <RetweetButton tweetId={tweet.id} />
-        <LikeButton tweetId={tweet.id} />
+        <RetweetButton tweetId={tweet.id} tweetOwnerId={tweet.user_id} />
+        <LikeButton tweetId={tweet.id} tweetOwnerId={tweet.user_id} />
         <div className="flex items-center gap-4">
           <div className="hover:text-blue-400 cursor-pointer group">
             <div className="w-[34.75px] h-[34.75px] -m-2 flex items-center justify-center rounded-full group-hover:bg-blue-400/12">

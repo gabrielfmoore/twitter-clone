@@ -103,7 +103,7 @@ export default async function Page({
         </div>
       </div>
 
-      <ReplyPost tweetId={tweet.id} />
+      <ReplyPost tweetId={tweet.id} tweetOwnerId={tweet.user_id} />
       <Comments tweetId={tweet.id} />
     </div>
   );

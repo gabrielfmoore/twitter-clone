@@ -2,19 +2,30 @@ import { useToggleLike, useUserLike, useGetLikeCount } from "@/custom-hooks/useL
 import { useGetUser } from "@/custom-hooks/useGetUser";
 import React from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { createNotification } from "@/services/notifications";
 
-export default function LikeButton({ tweetId }: { tweetId: string }) {
+export default function LikeButton({ tweetId, tweetOwnerId }: { tweetId: string; tweetOwnerId?: string }) {
   const { session } = useGetUser();
   const userId = session?.user.id;
   const { data: hasLiked } = useUserLike(userId, tweetId);
   const { data: likeCount } = useGetLikeCount(tweetId);
   const { mutate } = useToggleLike();
 
+  const handleLike = () => {
+    mutate({ userId, tweetId, hasLiked: !!hasLiked }, {
+      onSuccess: () => {
+        if (!hasLiked && userId && tweetOwnerId) {
+          createNotification({ userId: tweetOwnerId, actorId: userId, type: "like", tweetId });
+        }
+      },
+    });
+  };
+
   return (
     <>
       {hasLiked ? (
         <button
-          onClick={() => mutate({ userId, tweetId, hasLiked: !!hasLiked })}
+          onClick={handleLike}
           suppressHydrationWarning
           className="flex items-center gap-1 text-like cursor-pointer group"
         >
@@ -25,7 +36,7 @@ export default function LikeButton({ tweetId }: { tweetId: string }) {
         </button>
       ) : (
         <button
-          onClick={() => mutate({ userId, tweetId, hasLiked: !!hasLiked })}
+          onClick={handleLike}
           suppressHydrationWarning
           className="flex items-center gap-1 hover:text-like cursor-pointer group"
         >
