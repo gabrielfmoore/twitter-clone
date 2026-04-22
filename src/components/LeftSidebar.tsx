@@ -47,7 +47,7 @@ export default function LeftSidebar() {
 
   return (
     <aside
-      className={`sticky top-0 left-0 shrink-0 h-dvh flex justify-center border-border border-r md:ml-[calc(-33vw+242px)] lg:ml-0 ${isChat ? "" : "2xl:overflow-x-clip"}`}
+      className={`sticky top-0 left-0 shrink-0 h-dvh flex justify-center pr-[1px] shadow-[inset_-1px_0_0_0_#333639] md:ml-[calc(-33vw+242px)] lg:ml-0 ${isChat ? "" : "2xl:overflow-x-clip"}`}
       role="navigation"
       aria-label="Sidebar"
     >

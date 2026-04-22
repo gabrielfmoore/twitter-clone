@@ -8,7 +8,7 @@ export default function FeedLayout({
   return (
     <div suppressHydrationWarning className="flex sm:justify-center max-w-[100vw]">
       <LeftSidebar />
-      <div className="flex-1 min-w-0 sm:flex-none sm:w-[600px] lg:w-[598px] xl:w-[599px] h-full shrink-0 min-h-screen mr-0 border-r border-border">
+      <div className="flex-1 min-w-0 sm:flex-none sm:w-[600px] lg:w-[598px] xl:w-[599px] h-full shrink-0 min-h-screen mr-0 pr-[1px] shadow-[inset_-1px_0_0_0_#333639]">
         {children}
         <div className="w-full h-[200px]"></div>
       </div>
