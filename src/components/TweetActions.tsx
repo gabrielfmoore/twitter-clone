@@ -17,15 +17,17 @@ export default function TweetActions({ tweet }: { tweet: Tweet }) {
   return (
     <>
       <div className="flex justify-between mt-1 text-secondary-text">
-        <div
+        <button
+          type="button"
           onClick={() => setReplyOpen(true)}
-          className="flex items-center gap-1 hover:text-blue-400 cursor-pointer group"
+          className="flex items-center gap-1 hover:text-blue-400 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="Reply"
         >
           <div className="w-[34.75px] h-[34.75px] -m-2 flex items-center justify-center rounded-full group-hover:bg-blue-400/12">
             <FaRegComment />
           </div>
           <span className="text-sm">{commentCount || null}</span>
-        </div>
+        </button>
         <RetweetButton tweetId={tweet.id} tweetOwnerId={tweet.user_id} />
         <LikeButton tweetId={tweet.id} tweetOwnerId={tweet.user_id} />
         <div className="flex items-center gap-4">

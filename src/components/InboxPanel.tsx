@@ -103,27 +103,27 @@ export default function InboxPanel() {
             </button>
             {showDropdown && (
               <div className="absolute right-0 top-full mt-1 w-[280px] bg-black border border-border rounded-xl shadow-lg z-50 py-1 overflow-hidden">
-                <button className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
                   <IoChatbubbleOutline size={20} className="text-white" />
                   <span className="text-white text-[15px]">All</span>
                 </button>
-                <button className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
                   <div className="relative">
                     <IoChatbubbleOutline size={20} className="text-white" />
                     <div className="absolute -top-[1px] -right-[1px] w-[7px] h-[7px] bg-primary rounded-full" />
                   </div>
                   <span className="text-white text-[15px]">Unread</span>
                 </button>
-                <button className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
                   <IoPersonOutline size={20} className="text-white" />
                   <span className="text-white text-[15px]">Direct</span>
                 </button>
-                <button className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
                   <IoPeopleOutline size={20} className="text-white" />
                   <span className="text-white text-[15px]">Groups</span>
                 </button>
                 <div className="border-t border-border my-1" />
-                <button className="flex items-center justify-between px-4 py-3 hover:bg-hover w-full cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center justify-between px-4 py-3 hover:bg-hover w-full cursor-pointer">
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <IoChatbubbleOutline size={20} className="text-white" />
@@ -136,7 +136,7 @@ export default function InboxPanel() {
                   </div>
                   <IoChevronForward size={18} className="text-secondary-text" />
                 </button>
-                <button className="flex items-center justify-between px-4 py-3 hover:bg-hover w-full cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center justify-between px-4 py-3 hover:bg-hover w-full cursor-pointer">
                   <div className="flex items-center gap-3">
                     <IoSettingsOutline size={20} className="text-white" />
                     <span className="text-white text-[15px]">Settings</span>
@@ -144,7 +144,7 @@ export default function InboxPanel() {
                   <IoChevronForward size={18} className="text-secondary-text" />
                 </button>
                 <div className="border-t border-border my-1" />
-                <button className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
+                <button suppressHydrationWarning className="flex items-center gap-3 px-4 py-3 hover:bg-hover w-full text-left cursor-pointer">
                   <IoCheckmarkOutline size={20} className="text-white" />
                   <span className="text-white text-[15px]">
                     Mark all as read
@@ -154,7 +154,7 @@ export default function InboxPanel() {
             )}
           </div>
           {/* New message button */}
-          <button
+          <button suppressHydrationWarning
             onClick={() => setShowNewConvo(true)}
             className="p-2 rounded-full hover:bg-hover cursor-pointer border border-border"
           >
@@ -180,6 +180,7 @@ export default function InboxPanel() {
               }
             />
             <input
+              suppressHydrationWarning
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -227,6 +228,7 @@ export default function InboxPanel() {
             conversations && conversations.length > 0 ? (
               conversations.slice(0, 5).map((convo) => (
                 <button
+                suppressHydrationWarning 
                   key={convo.id}
                   onClick={() => handleSelectConversation(convo.id)}
                   className="flex items-center gap-3 px-4 py-3 hover:bg-hover cursor-pointer w-full text-left"

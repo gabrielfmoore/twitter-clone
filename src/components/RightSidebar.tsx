@@ -72,7 +72,7 @@ export default function RightSidebar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
   return (
-    <aside className=" top-0 lg:w-[310px] xl:w-[390px] pl-[20px] xl:pl-[30px] lg:mr-[10px] shrink-0 h-screen hidden lg:block">
+    <aside className=" top-0 lg:w-[310px] xl:w-[389px] pl-[20px] xl:pl-[30px] lg:mr-[10px] xl:mr-[1px] shrink-0 h-screen hidden lg:block ">
       <div className="flex flex-col w-full xl:w-[350px]">
         <div ref={searchRef} className="sticky top-0 z-10 relative">
           <div suppressHydrationWarning className="bg-black/65 backdrop-blur-md text-secondary-text flex items-center gap-[4px] border border-border px-[12px] py-[11px] mt-[5px] rounded-full">

@@ -6,8 +6,8 @@ export default function MessagesLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div suppressHydrationWarning className="flex sm:justify-center max-w-[100vw]">
-      <LeftSidebar collapsed />
-      <div className="flex-1 sm:flex-none min-w-0 min-h-screen lg:mr-[9px] 2xl:mr-[10px] md:mr-22 ">
+      <LeftSidebar />
+      <div className="flex-1 sm:flex-none min-w-0 min-h-screen">
         {children}
       </div>
     </div>

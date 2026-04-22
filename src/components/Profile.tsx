@@ -28,12 +28,12 @@ export default function Profile({ collapsed = false }: { collapsed?: boolean }) 
   return (
     <div
       ref={ref}
-      className={`relative flex justify-center items-center w-full ${collapsed ? "" : "2xl:justify-between 2xl:mr-1"}`}
+      className={`relative flex justify-center items-center w-full ${collapsed ? "" : "2xl:justify-between 2xl:pl-[11px] 2xl:pr-[10px]"}`}
     >
       <div
         onClick={() => setLogoutOpen(!logoutOpen)}
         suppressHydrationWarning
-        className="flex items-center gap-[11px] cursor-pointer"
+        className="flex items-center gap-[12px] cursor-pointer"
       >
         {avatarUrl ? (
           <Image

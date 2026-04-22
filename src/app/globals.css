@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+html {
+  scrollbar-gutter: stable;
+}
+
+html, body {
+  overscroll-behavior: none;
+}
+
 @theme {
   --color-primary: #1DA1F2;
   --color-primary-text: #ffffff;
@@ -16,8 +24,8 @@
 
   --breakpoint-xs: 600px;
   --breakpoint-sm: 688px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 988px;
+  --breakpoint-md: 775px;
+  --breakpoint-lg: 1006px;
   --breakpoint-xl: 1078px;
   --breakpoint-2xl: 1285px;
   --breakpoint-3xl: 1536px;
