@@ -153,12 +153,22 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
             <div ref={gifRef} className="text-primary cursor-pointer relative">
               <div
                 className="text-primary cursor-pointer"
-                onClick={() => setShowGifPicker((v) => !v)}
+                onClick={() => {
+                  if (!showGifPicker && gifRef.current) {
+                    const rect = gifRef.current.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - rect.bottom;
+                    setShowAbove(spaceBelow < 450);
+                  }
+                  setShowGifPicker((v) => !v);
+                }}
               >
                 <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
               </div>
               {showGifPicker && (
-                <div className="absolute z-50 top-full left-0 mt-2 w-[300px] h-[400px] bg-black border border-border rounded-xl flex flex-col shadow-2xl">
+                <div
+                  className={`absolute z-10 left-0 w-[320px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
+                  style={{ background: "black", height: 400 }}
+                >
                   <div className="p-2 border-b border-border">
                     <input
                       autoFocus
