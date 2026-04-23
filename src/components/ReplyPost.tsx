@@ -231,7 +231,7 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
                   <EmojiPicker
                     onEmojiClick={onEmojiClick}
                     theme={Theme.DARK}
-                    style={{ width: "320", background: "black" }}
+                    style={{ width: "292", background: "black" }}
                   />
                 </div>
               )}
