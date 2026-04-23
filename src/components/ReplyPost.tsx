@@ -167,7 +167,7 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
               </div>
               {showGifPicker && (
                 <div
-                  className={`absolute z-10 left-0 w-[292px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
+                  className={`absolute z-10 left-0 w-[280px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
                   style={{ background: "black", height: 400 }}
                 >
                   <div className="p-2 border-b border-border">
@@ -226,12 +226,12 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
               </div>
               {showEmojiPicker && (
                 <div
-                  className={`absolute z-10 left-0 w-[292px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
+                  className={`absolute z-10 left-0 w-[280px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
                 >
                   <EmojiPicker
                     onEmojiClick={onEmojiClick}
                     theme={Theme.DARK}
-                    style={{ width: "292", background: "black" }}
+                    style={{ width: "280", background: "black" }}
                   />
                 </div>
               )}
