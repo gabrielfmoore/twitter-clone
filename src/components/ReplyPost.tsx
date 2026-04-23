@@ -151,7 +151,7 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
             >
               <TbPhoto size={18} className="translate-y-[1px]" />
             </div>
-            <div ref={gifRef} className="text-primary cursor-pointer relative">
+            <div ref={gifRef} className="text-primary cursor-pointer">
               <div
                 className="text-primary cursor-pointer"
                 onClick={() => {
