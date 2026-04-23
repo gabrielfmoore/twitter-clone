@@ -141,7 +141,7 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
           </div>
         )}
         <div
-          className={`${isFocused ? "flex" : "hidden"} relative justify-between pt-[13px] pl-[1px] items-center`}
+          className={`${isFocused ? "flex" : "hidden"} z-100 relative justify-between pt-[13px] pl-[1px] items-center`}
           style={{zIndex: 1}}
         >
           <div className="flex gap-[18px] min-w-0 overflow-x-auto scrollbar-hidden">
@@ -167,7 +167,7 @@ export default function ReplyPost({ tweetId, tweetOwnerId }: { tweetId: string; 
               </div>
               {showGifPicker && (
                 <div
-                  className={`absolute z-50 left-0 w-[320px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
+                  className={`absolute z-10 left-0 w-[320px] max-w-2xl border border-border rounded-lg ${showAbove ? "bottom-full" : "top-full"}`}
                   style={{ background: "black", height: 400 }}
                 >
                   <div className="p-2 border-b border-border">
