@@ -17,6 +17,11 @@ import { usePostTweet } from "@/custom-hooks/useTweet";
 import { FaGlobeAmericas } from "react-icons/fa";
 
 export default function CreatePost() {
+    // GIF Picker State
+    const [showGifPicker, setShowGifPicker] = useState(false);
+    const [gifSearch, setGifSearch] = useState("");
+    const [gifResults, setGifResults] = useState<any[]>([]);
+    const gifRef = useRef<HTMLDivElement>(null);
   const { profile, session } = useGetUser();
   const [post, setPost] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -28,16 +33,44 @@ export default function CreatePost() {
   const [isFocused, setIsFocused] = useState(false);
   const { mutate, isPending } = usePostTweet();
 
+  // Handle outside click and ESC for pickers
   useEffect(() => {
-    if (!showEmojiPicker) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
-        setShowEmojiPicker(false);
+    if (!showEmojiPicker && !showGifPicker) return;
+    const handle = (e: MouseEvent | KeyboardEvent) => {
+      if (e instanceof MouseEvent) {
+        if (showEmojiPicker && emojiRef.current && !emojiRef.current.contains(e.target as Node)) setShowEmojiPicker(false);
+        if (showGifPicker && gifRef.current && !gifRef.current.contains(e.target as Node)) setShowGifPicker(false);
+      }
+      if (e instanceof KeyboardEvent && e.key === "Escape") {
+        if (showEmojiPicker) setShowEmojiPicker(false);
+        else if (showGifPicker) setShowGifPicker(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showEmojiPicker]);
+    document.addEventListener("mousedown", handle);
+    document.addEventListener("keydown", handle);
+    return () => {
+      document.removeEventListener("mousedown", handle);
+      document.removeEventListener("keydown", handle);
+    };
+  }, [showEmojiPicker, showGifPicker]);
+
+  // Giphy API logic
+  useEffect(() => {
+    if (!showGifPicker) return;
+    const fetchGifs = async () => {
+      const apiKey = "aKs3kXfnrKXzCIqTE4FC4L0DUwSej6iO";
+      const endpoint = gifSearch.trim()
+        ? `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${gifSearch}&limit=20`
+        : `https://api.giphy.com/v1/gifs/trending?api_key=${apiKey}&limit=20`;
+      try {
+        const res = await fetch(endpoint);
+        const { data } = await res.json();
+        setGifResults(data || []);
+      } catch {}
+    };
+    const timer = setTimeout(fetchGifs, 400);
+    return () => clearTimeout(timer);
+  }, [gifSearch, showGifPicker]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -138,8 +171,43 @@ export default function CreatePost() {
             >
               <TbPhoto size={18} className="translate-y-[1px]" />
             </div>
-            <div className="text-primary cursor-pointer w-[36px]">
-              <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
+            <div ref={gifRef} className="text-primary cursor-pointer w-[36px] relative">
+              <div
+                className="text-primary cursor-pointer"
+                onClick={() => setShowGifPicker((v) => !v)}
+              >
+                <MdOutlineGifBox size={20} className="translate-x-[-1px]" />
+              </div>
+              {showGifPicker && (
+                <div className="absolute z-50 top-full left-0 mt-2 w-[300px] h-[400px] bg-black border border-border rounded-xl flex flex-col shadow-2xl">
+                  <div className="p-2 border-b border-border">
+                    <input
+                      autoFocus
+                      type="text"
+                      placeholder="Search GIFs"
+                      value={gifSearch}
+                      onChange={(e) => setGifSearch(e.target.value)}
+                      className="w-full bg-[#16181c] text-white p-2 rounded-lg outline-none ring-primary focus:ring-1"
+                    />
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-2 grid grid-cols-2 gap-2 custom-scrollbar">
+                    {gifResults.map((gif) => (
+                      <button
+                        key={gif.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedImage(gif.images.fixed_height.url);
+                          setTweetImage(null);
+                          setShowGifPicker(false);
+                        }}
+                        className="w-full h-24 rounded overflow-hidden focus:ring-2 ring-primary outline-none hover:opacity-80"
+                      >
+                        <img src={gif.images.fixed_height.url} alt={gif.title} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="text-primary cursor-pointer w-[36px] ">
               <div

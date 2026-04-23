@@ -287,7 +287,7 @@ export default function LeftSidebar() {
           )}
           <div className="mt-auto w-full">
             <div
-              className={`mt-[14px] mb-[12px] xl:mr-1 py-3 w-full text-white flex justify-center items-center ${isChat ? "" : "2xl:mt-[24px] md:ml-[0] 2xl:ml-0 ml:[2px] xl:justify-between"}`}
+              className={`mt-[24px] mb-[12px] xl:mr-1 py-3 w-full text-white flex justify-center items-center ${isChat ? "" : "2xl:mt-[24px] md:ml-[0] 2xl:ml-0 ml:[2px] xl:justify-between"}`}
             >
               <Profile collapsed={isChat} />
             </div>
