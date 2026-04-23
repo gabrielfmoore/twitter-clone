@@ -17,11 +17,11 @@ import { usePostTweet } from "@/custom-hooks/useTweet";
 import { FaGlobeAmericas } from "react-icons/fa";
 
 export default function CreatePost() {
-    // GIF Picker State
-    const [showGifPicker, setShowGifPicker] = useState(false);
-    const [gifSearch, setGifSearch] = useState("");
-    const [gifResults, setGifResults] = useState<any[]>([]);
-    const gifRef = useRef<HTMLDivElement>(null);
+  // GIF Picker State
+  const [showGifPicker, setShowGifPicker] = useState(false);
+  const [gifSearch, setGifSearch] = useState("");
+  const [gifResults, setGifResults] = useState<any[]>([]);
+  const gifRef = useRef<HTMLDivElement>(null);
   const { profile, session } = useGetUser();
   const [post, setPost] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -38,8 +38,18 @@ export default function CreatePost() {
     if (!showEmojiPicker && !showGifPicker) return;
     const handle = (e: MouseEvent | KeyboardEvent) => {
       if (e instanceof MouseEvent) {
-        if (showEmojiPicker && emojiRef.current && !emojiRef.current.contains(e.target as Node)) setShowEmojiPicker(false);
-        if (showGifPicker && gifRef.current && !gifRef.current.contains(e.target as Node)) setShowGifPicker(false);
+        if (
+          showEmojiPicker &&
+          emojiRef.current &&
+          !emojiRef.current.contains(e.target as Node)
+        )
+          setShowEmojiPicker(false);
+        if (
+          showGifPicker &&
+          gifRef.current &&
+          !gifRef.current.contains(e.target as Node)
+        )
+          setShowGifPicker(false);
       }
       if (e instanceof KeyboardEvent && e.key === "Escape") {
         if (showEmojiPicker) setShowEmojiPicker(false);
@@ -160,10 +170,12 @@ export default function CreatePost() {
         >
           {isFocused && (
             <div className="absolute flex flex-row items-center bottom-[calc(80%+25px)] gap-2 text-primary">
-            <FaGlobeAmericas size={14} />
-            <span className="text-[14px] font-extrabold">Everyone can reply</span>
-          </div>)
-          }
+              <FaGlobeAmericas size={14} />
+              <span className="text-[14px] font-extrabold">
+                Everyone can reply
+              </span>
+            </div>
+          )}
           <div className="flex gap-[18px] w-[202px] scrollbar-hidden max-w-[calc(100%-73px)] ">
             <div
               className="text-primary cursor-pointer w-[36px]"
@@ -171,7 +183,10 @@ export default function CreatePost() {
             >
               <TbPhoto size={18} className="translate-y-[1px]" />
             </div>
-            <div ref={gifRef} className="text-primary cursor-pointer w-[36px] relative">
+            <div
+              ref={gifRef}
+              className="text-primary cursor-pointer w-[36px] relative"
+            >
               <div
                 className="text-primary cursor-pointer"
                 onClick={() => setShowGifPicker((v) => !v)}
@@ -202,7 +217,11 @@ export default function CreatePost() {
                         }}
                         className="w-full h-24 rounded overflow-hidden focus:ring-2 ring-primary outline-none hover:opacity-80"
                       >
-                        <img src={gif.images.fixed_height.url} alt={gif.title} className="w-full h-full object-cover" />
+                        <img
+                          src={gif.images.fixed_height.url}
+                          alt={gif.title}
+                          className="w-full h-full object-cover"
+                        />
                       </button>
                     ))}
                   </div>
