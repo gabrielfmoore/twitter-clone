@@ -194,6 +194,7 @@ export default function EditProfileModal({
                 maxLength={160}
                 rows={3}
                 className="block w-full bg-transparent text-white text-[17px] outline-none resize-none"
+                placeholder="not setup yet"
               />
             </div>
 
@@ -208,6 +209,7 @@ export default function EditProfileModal({
                 onChange={(e) => setLocation(e.target.value)}
                 maxLength={30}
                 className="block w-full bg-transparent text-white text-[17px] outline-none"
+                placeholder="not setup yet"
               />
             </div>
 
@@ -222,6 +224,7 @@ export default function EditProfileModal({
                 onChange={(e) => setWebsite(e.target.value)}
                 maxLength={100}
                 className="block w-full bg-transparent text-white text-[17px] outline-none"
+                placeholder="not setup yet"
               />
             </div>
 

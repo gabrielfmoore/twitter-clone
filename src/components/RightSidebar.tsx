@@ -53,6 +53,7 @@ export default function RightSidebar() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [showNews, setShowNews] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -150,46 +151,55 @@ export default function RightSidebar() {
             Subscribe
           </button>
         </div>
-        <div className="border border-border h-[364px] flex flex-col px-4 pt-3 text-[20px] text-white font-black mt-4 rounded-2xl overflow-hidden">
-          <div className="flex justify-between items-center">
-            <h3 className="flex flex-row justify-between tracking-[-0.01em]">Today&apos;s News</h3>
-            <RxCross2 size={18} className="text-white mr-[7px] mt-[2px]" />
-          </div>
-          {[
-            {
-              headline: "Illinois Illini Retain Four Key Final Four Players for 2026-27",
-              time: "2 days ago",
-              category: "Sports",
-              posts: "12.2K posts",
-            },
-            {
-              headline: "Iran announces reopening of Strait of Hormuz to commercial vessels during Israel-Lebanon ceasefire",
-              time: "1 day ago",
-              category: "News",
-              posts: "33.9K posts",
-            },
-            {
-              headline: "X Users Discuss Favorite Characters from the TV Series LOST",
-              time: "7 hours ago",
-              category: "Entertainment",
-              posts: "319 posts",
-            },
-          ].map((item, i) => (
-            <div key={i} className={`${i === 0 ? "pt-[30px]" : "pt-[16px]"} pb-[16px] last:pb-0`}>
-              <p className="font-extrabold text-[14.5px] leading-[1.4] line-clamp-2">{item.headline}</p>
-              <div className="flex items-center gap-[6px] mt-[6px]">
-                <div className="flex -space-x-[10px]">
-                  <div className="w-[23px] h-[23px] rounded-full bg-blue-500 border-2 border-black z-[3]" />
-                  <div className="w-[23px] h-[23px] rounded-full bg-green-500 border-2 border-black z-[2]" />
-                  <div className="w-[23px] h-[23px] rounded-full bg-purple-500 border-2 border-black z-[1]" />
-                </div>
-                <span className="text-secondary-text text-[13px] font-normal">
-                  {item.time} · {item.category} · {item.posts}
-                </span>
-              </div>
+        {showNews && (
+          <div className="border border-border h-[364px] flex flex-col px-4 pt-3 text-[20px] text-white font-black mt-4 rounded-2xl overflow-hidden">
+            <div className="flex justify-between items-center">
+              <h3 className="flex flex-row justify-between tracking-[-0.01em]">Today&apos;s News</h3>
+              <button
+                aria-label="Close news section"
+                className="text-white mr-[7px] mt-[2px] hover:opacity-70 cursor-pointer"
+                onClick={() => setShowNews(false)}
+                suppressHydrationWarning
+              >
+                <RxCross2 size={18} />
+              </button>
             </div>
-          ))}
-        </div>
+            {[
+              {
+                headline: "Illinois Illini Retain Four Key Final Four Players for 2026-27",
+                time: "2 days ago",
+                category: "Sports",
+                posts: "12.2K posts",
+              },
+              {
+                headline: "Iran announces reopening of Strait of Hormuz to commercial vessels during Israel-Lebanon ceasefire",
+                time: "1 day ago",
+                category: "News",
+                posts: "33.9K posts",
+              },
+              {
+                headline: "X Users Discuss Favorite Characters from the TV Series LOST",
+                time: "7 hours ago",
+                category: "Entertainment",
+                posts: "319 posts",
+              },
+            ].map((item, i) => (
+              <div key={i} className={`${i === 0 ? "pt-[30px]" : "pt-[16px]"} pb-[16px] last:pb-0`}>
+                <p className="font-extrabold text-[14.5px] leading-[1.4] line-clamp-2">{item.headline}</p>
+                <div className="flex items-center gap-[6px] mt-[6px]">
+                  <div className="flex -space-x-[10px]">
+                    <div className="w-[23px] h-[23px] rounded-full bg-blue-500 border-2 border-black z-[3]" />
+                    <div className="w-[23px] h-[23px] rounded-full bg-green-500 border-2 border-black z-[2]" />
+                    <div className="w-[23px] h-[23px] rounded-full bg-purple-500 border-2 border-black z-[1]" />
+                  </div>
+                  <span className="text-secondary-text text-[13px] font-normal">
+                    {item.time} · {item.category} · {item.posts}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="border border-border flex flex-col px-4 py-3 text-[20px]/[1.3] text-white font-black mt-4 rounded-2xl">
           <div className="flex justify-between items-center mb-2">
             <h3 className="flex flex-row justify-between tracking-[-0.01em]">What&apos;s happening</h3>

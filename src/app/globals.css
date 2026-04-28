@@ -2,10 +2,12 @@
 
 html {
   scrollbar-gutter: stable;
+  width: 100%;
 }
 
 html, body {
   overscroll-behavior: none;
+  width: 100%;
 }
 
 @theme {
@@ -41,4 +43,8 @@ html, body {
 .scrollbar-hidden {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.nonfunctional-button {
+  cursor: default !important;
 }

@@ -109,7 +109,7 @@ export default function TweetMenu({ tweet }: { tweet: Tweet }) {
         alt="Grok"
         width={20}
         height={20}
-        className="hidden xs:block w-[19px] h-[19px] grayscale cursor-pointer scale-110 translate-x-[2px] hover:opacity-100 hover:grayscale-0"
+        className="hidden xs:block w-[19px] h-[19px] grayscale scale-110 translate-x-[2px] hover:opacity-100 hover:grayscale-0"
       />
       <BsThreeDots
         onClick={() => setDropdownOpen(!dropdownOpen)}

@@ -23,7 +23,15 @@ import { getProfileByUsername } from "@/services/auth";
 import { useQuery } from "@tanstack/react-query";
 import MediaViewerModal from "./MediaViewerModal";
 
-const tabs = ["Posts", "Replies", "Highlights", "Articles", "Media", "Likes"];
+const tabs = ["Posts", 
+  "Replies", 
+  "Media", 
+  "Likes",
+  "Highlights", 
+  "Articles", 
+];
+
+const nonFunctionalTabs = ["Replies", "Highlights", "Articles"];
 
 export default function ProfilePage({ username }: { username: string }) {
   const [activeTab, setActiveTab] = useState("Posts");
@@ -179,29 +187,33 @@ export default function ProfilePage({ username }: { username: string }) {
       {/* Tabs */}
       <div className="overflow-x-auto scrollbar-hidden border-b border-border">
         <div className="h-[53px] w-full px-0 min-w-[492px] grid grid-cols-6 text-white text-[15px] mt-[2px]">
-        {tabs.map((tab) => (
-          <button
-            suppressHydrationWarning
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className="flex items-center justify-center cursor-pointer hover:bg-hover"
-          >
-            <div className="relative h-full flex items-center">
-              <span
-                className={
-                  activeTab === tab
-                    ? "font-bold"
-                    : "text-secondary-text font-[500]"
-                }
-              >
-                {tab}
-              </span>
-              {activeTab === tab && (
-                <div className="absolute h-1 w-full bg-primary bottom-0 rounded-full" />
-              )}
-            </div>
-          </button>
-        ))}
+        {tabs.map((tab) => {
+          const isNonFunctional = nonFunctionalTabs.includes(tab);
+          return (
+            <button
+              suppressHydrationWarning
+              key={tab}
+              onClick={isNonFunctional ? undefined : () => setActiveTab(tab)}
+              className={`flex items-center justify-center ${isNonFunctional ? 'cursor-default line-through text-secondary-text' : 'cursor-pointer hover:bg-hover'}`}
+              disabled={isNonFunctional}
+            >
+              <div className="relative h-full flex items-center">
+                <span
+                  className={
+                    activeTab === tab
+                      ? "font-bold"
+                      : "text-secondary-text font-[500]"
+                  }
+                >
+                  {tab}
+                </span>
+                {activeTab === tab && !isNonFunctional && (
+                  <div className="absolute h-1 w-full bg-primary bottom-0 rounded-full" />
+                )}
+              </div>
+            </button>
+          );
+        })}
         </div>
       </div>
 

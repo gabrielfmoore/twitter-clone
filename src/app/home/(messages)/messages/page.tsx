@@ -1,4 +1,7 @@
+
 "use client";
+import { useGetUser } from "@/custom-hooks/useGetUser";
+import { useRealtimeMessages } from "@/custom-hooks/useRealtimeMessages";
 
 import InboxPanel from "@/src/components/InboxPanel";
 import NewConversationModal from "@/src/components/NewConversationModal";
@@ -7,6 +10,9 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 
 export default function MessagesPage() {
   const [showNewConvo, setShowNewConvo] = useState(false);
+  const { session } = useGetUser();
+  const userId = session?.user.id;
+  useRealtimeMessages(userId);
 
   return (
     <>

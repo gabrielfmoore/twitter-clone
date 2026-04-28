@@ -302,7 +302,7 @@ export default function InboxPanel() {
                       {convo.otherUser?.name}
                     </span>
                     {convo.lastMessage && (
-                      <p className="text-secondary-text text-[14px] truncate">
+                      <p className={`${unreadSet.has(convo.id) ? "text-white font-bold" : "text-secondary-text"} text-[14px] truncate`}>
                         {convo.lastMessage.sender_id === userId && "You: "}
                         {convo.lastMessage.content}
                       </p>

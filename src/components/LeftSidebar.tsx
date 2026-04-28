@@ -88,9 +88,8 @@ export default function LeftSidebar() {
               Home
             </span>
           </Link>
-          <Link
-            href="#"
-            className="text-white flex items-center h-[48.3px] px-[10px] rounded-full hover:bg-hover"
+          <div
+            className="text-white flex items-center h-[48.3px] px-[10px] rounded-full hover:bg-hover !cursor-default"
             aria-label="Explore"
             aria-current={isExplore ? "page" : undefined}
           >
@@ -104,10 +103,9 @@ export default function LeftSidebar() {
             >
               Explore
             </span>
-          </Link>
-          <Link
-            href="#"
-            className="text-white flex items-center h-[48.3px] px-[10px]  rounded-full hover:bg-hover"
+          </div>
+          <div
+            className="text-white flex items-center h-[48.3px] px-[10px]  rounded-full hover:bg-hover !cursor-default"
             aria-label="Notifications"
           >
             <div
@@ -120,10 +118,9 @@ export default function LeftSidebar() {
             >
               Notifications
             </span>
-          </Link>
-          <Link
-            href="#"
-            className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[9px] rounded-full hover:bg-hover"
+          </div>
+          <div
+            className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[9px] rounded-full hover:bg-hover !cursor-default"
             aria-label="Follow"
             aria-current={isFollow ? "page" : undefined}
           >
@@ -137,7 +134,7 @@ export default function LeftSidebar() {
             >
               Follow
             </span>
-          </Link>
+          </div>
           <Link
             href="/home/messages"
             className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
@@ -164,9 +161,8 @@ export default function LeftSidebar() {
               Chat
             </span>
           </Link>
-          <Link
-            href="#/*  */"
-            className={`text-white flex items-center h-[48.3px] px-[10px] rounded-full hover:bg-hover ${isChat ? " 2xl:-ml-[2px]" : "2xl:ml-[1px]"}`}
+          <div
+            className={`text-white flex items-center h-[48.3px] px-[10px] rounded-full hover:bg-hover !cursor-default ${isChat ? " 2xl:-ml-[2px]" : "2xl:ml-[1px]"}`}
             aria-label="Grok"
           >
             <div
@@ -185,10 +181,9 @@ export default function LeftSidebar() {
             >
               Grok
             </span>
-          </Link>
-          <Link
-            href="#"
-            className="hidden [@media(min-height:717px)]:flex text-white items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
+          </div>
+          <div
+            className="hidden [@media(min-height:717px)]:flex text-white items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover !cursor-default"
             aria-label="Bookmarks"
             aria-current={isBookmarks ? "page" : undefined}
           >
@@ -202,10 +197,9 @@ export default function LeftSidebar() {
             >
               Bookmarks
             </span>
-          </Link>
-          <Link
-            href="#"
-            className="hidden [@media(min-height:767px)]:flex text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
+          </div>
+          <div
+            className="hidden [@media(min-height:767px)]:flex text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover !cursor-default"
             aria-label="Creator Studio"
           >
             <div
@@ -218,10 +212,9 @@ export default function LeftSidebar() {
             >
               Creator Studio
             </span>
-          </Link>
-          <Link
-            href="#"
-            className="hidden [@media(min-height:667px)]:flex text-white items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
+          </div>
+          <div
+            className="hidden [@media(min-height:667px)]:flex text-white items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover !cursor-default"
             aria-label="Premium"
           >
             <div
@@ -234,7 +227,7 @@ export default function LeftSidebar() {
             >
               Premium
             </span>
-          </Link>
+          </div>
           <Link
             href={`/${profile?.username || ""}`}
             className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[11px] rounded-full hover:bg-hover"
@@ -252,9 +245,8 @@ export default function LeftSidebar() {
               Profile
             </span>
           </Link>
-          <Link
-            href="#"
-            className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover"
+          <div
+            className="text-white flex items-center h-[48.3px] px-[10px] 2xl:px-[10px] rounded-full hover:bg-hover !cursor-default"
             aria-label="More"
           >
             <div
@@ -267,18 +259,18 @@ export default function LeftSidebar() {
             >
               More
             </span>
-          </Link>
+          </div>
           <button
             suppressHydrationWarning
             onClick={() => setShowPostModal(true)}
-            className={`${isChat ? "hidden" : "hidden 2xl:block"} bg-white text-black text-[17px] py-[13px] w-full xl:w-[233px] 2xl:mt-[8px] [@media(min-width:1265px)_and_(min-height:855px)]:mt-[17px] mt-[9px] font-bold rounded-full cursor-pointer xl:-ml-[1px]`}
+            className={`${isChat ? "hidden" : "hidden 2xl:block"} bg-white text-black text-[17px] py-[13px] w-full xl:w-[233px] 2xl:mt-[8px] [@media(min-width:1265px)_and_(min-height:855px)]:mt-[17px] mt-[9px] font-bold rounded-full !cursor-default xl:-ml-[1px]`}
           >
             Post
           </button>
           <button
             suppressHydrationWarning
             onClick={() => setShowPostModal(true)}
-            className={`flex justify-center items-center bg-primary h-[52px] w-[52px] p-[11px] ml-[6px] mt-[7px] mr-[5px] rounded-full cursor-pointer text-white block ${isChat ? "" : "2xl:hidden"}`}
+            className={`flex justify-center items-center bg-primary h-[52px] w-[52px] p-[11px] ml-[6px] mt-[7px] mr-[5px] rounded-full text-white block !cursor-default ${isChat ? "" : "2xl:hidden"}`}
           >
             <FaFeatherAlt size={20} className="scale-0.5" />
           </button>

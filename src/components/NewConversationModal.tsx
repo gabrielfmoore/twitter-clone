@@ -32,11 +32,11 @@ export default function NewConversationModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-[5vh] bg-[rgba(91,112,131,0.4)]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black sm:bg-[rgba(91,112,131,0.4)] sm:pt-0 sm:items-center"
       onClick={onClose}
     >
       <div
-        className="bg-black w-full max-w-[600px] h-[90vh] rounded-2xl flex flex-col overflow-hidden"
+        className="w-full h-full max-w-none rounded-none flex flex-col overflow-hidden sm:bg-black sm:w-full sm:max-w-[600px] sm:h-[90vh] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
